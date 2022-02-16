@@ -1,0 +1,312 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="DXUT">
+      <UniqueIdentifier>{61c21fe8-b989-40b2-8490-64f3851ca37b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="canvas">
+      <UniqueIdentifier>{5b73b1be-44a9-4abf-847c-ec14522aae8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="geommath">
+      <UniqueIdentifier>{2acfb1a3-fd9a-4ba5-9573-1f0531b6c26f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="meshimport">
+      <UniqueIdentifier>{5e090793-0c18-4ef5-b012-7ded9bb0f2a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scenegraph">
+      <UniqueIdentifier>{5c3c26f4-4814-4116-98e5-c1bbf48f7f2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{1e03d3dc-abfd-43f8-9234-69742a746c70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderUtils">
+      <UniqueIdentifier>{c60fc932-6aa6-4996-a97a-acb1e7668479}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shadows">
+      <UniqueIdentifier>{f4cb3ff0-319c-47dc-97ae-6f6cb450a606}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Texture">
+      <UniqueIdentifier>{e714c3a3-b9f8-4504-abb9-2ab363fe1dc6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="hextile-demo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DXUT11\Core\DDSTextureLoader.h">
+      <Filter>DXUT</Filter>
+    </ClInclude>
+    <ClInclude Include="DXUT11\Core\dxerr.h">
+      <Filter>DXUT</Filter>
+    </ClInclude>
+    <ClInclude Include="DXUT11\Core\DXUT.h">
+      <Filter>DXUT</Filter>
+    </ClInclude>
+    <ClInclude Include="DXUT11\Core\DXUTDevice11.h">
+      <Filter>DXUT</Filter>
+    </ClInclude>
+    <ClInclude Include="DXUT11\Core\DXUTmisc.h">
+      <Filter>DXUT</Filter>
+    </ClInclude>
+    <ClInclude Include="DXUT11\Core\ScreenGrab.h">
+      <Filter>DXUT</Filter>
+    </ClInclude>
+    <ClInclude Include="DXUT11\Core\WICTextureLoader.h">
+      <Filter>DXUT</Filter>
+    </ClInclude>
+    <ClInclude Include="DXUT11\Optional\DXUTcamera.h">
+      <Filter>DXUT</Filter>
+    </ClInclude>
+    <ClInclude Include="DXUT11\Optional\DXUTgui.h">
+      <Filter>DXUT</Filter>
+    </ClInclude>
+    <ClInclude Include="DXUT11\Optional\DXUTguiIME.h">
+      <Filter>DXUT</Filter>
+    </ClInclude>
+    <ClInclude Include="DXUT11\Optional\DXUTLockFreePipe.h">
+      <Filter>DXUT</Filter>
+    </ClInclude>
+    <ClInclude Include="DXUT11\Optional\DXUTres.h">
+      <Filter>DXUT</Filter>
+    </ClInclude>
+    <ClInclude Include="DXUT11\Optional\DXUTsettingsdlg.h">
+      <Filter>DXUT</Filter>
+    </ClInclude>
+    <ClInclude Include="DXUT11\Optional\ImeUi.h">
+      <Filter>DXUT</Filter>
+    </ClInclude>
+    <ClInclude Include="DXUT11\Optional\SDKmesh.h">
+      <Filter>DXUT</Filter>
+    </ClInclude>
+    <ClInclude Include="DXUT11\Optional\SDKmisc.h">
+      <Filter>DXUT</Filter>
+    </ClInclude>
+    <ClInclude Include="canvas.h">
+      <Filter>canvas</Filter>
+    </ClInclude>
+    <ClInclude Include="geommath\geommath.h">
+      <Filter>geommath</Filter>
+    </ClInclude>
+    <ClInclude Include="geommath\mat33.h">
+      <Filter>geommath</Filter>
+    </ClInclude>
+    <ClInclude Include="geommath\mat44.h">
+      <Filter>geommath</Filter>
+    </ClInclude>
+    <ClInclude Include="geommath\quaternion.h">
+      <Filter>geommath</Filter>
+    </ClInclude>
+    <ClInclude Include="geommath\vec3.h">
+      <Filter>geommath</Filter>
+    </ClInclude>
+    <ClInclude Include="geommath\vec4.h">
+      <Filter>geommath</Filter>
+    </ClInclude>
+    <ClInclude Include="meshimport\meshdraw.h">
+      <Filter>meshimport</Filter>
+    </ClInclude>
+    <ClInclude Include="meshimport\mikktspace.h">
+      <Filter>meshimport</Filter>
+    </ClInclude>
+    <ClInclude Include="meshimport\objreader.h">
+      <Filter>meshimport</Filter>
+    </ClInclude>
+    <ClInclude Include="meshimport\weldmesh.h">
+      <Filter>meshimport</Filter>
+    </ClInclude>
+    <ClInclude Include="scenegraph.h">
+      <Filter>scenegraph</Filter>
+    </ClInclude>
+    <ClInclude Include="canvas_common.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="custom_cbuffers.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="illum.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="noise.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="shader_base.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="shadows_cbuffer.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="std_cbuffer.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="surfgrad_framework.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="shader.h">
+      <Filter>ShaderUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="shaderpipeline.h">
+      <Filter>ShaderUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="shaderutils.h">
+      <Filter>ShaderUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="shadows.h">
+      <Filter>shadows</Filter>
+    </ClInclude>
+    <ClInclude Include="buffer.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="texture_rt.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="hextile-demo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DXUT11\Core\DDSTextureLoader.cpp">
+      <Filter>DXUT</Filter>
+    </ClCompile>
+    <ClCompile Include="DXUT11\Core\dxerr.cpp">
+      <Filter>DXUT</Filter>
+    </ClCompile>
+    <ClCompile Include="DXUT11\Core\DXUT.cpp">
+      <Filter>DXUT</Filter>
+    </ClCompile>
+    <ClCompile Include="DXUT11\Core\DXUTDevice11.cpp">
+      <Filter>DXUT</Filter>
+    </ClCompile>
+    <ClCompile Include="DXUT11\Core\DXUTmisc.cpp">
+      <Filter>DXUT</Filter>
+    </ClCompile>
+    <ClCompile Include="DXUT11\Core\ScreenGrab.cpp">
+      <Filter>DXUT</Filter>
+    </ClCompile>
+    <ClCompile Include="DXUT11\Core\WICTextureLoader.cpp">
+      <Filter>DXUT</Filter>
+    </ClCompile>
+    <ClCompile Include="DXUT11\Optional\DXUTcamera.cpp">
+      <Filter>DXUT</Filter>
+    </ClCompile>
+    <ClCompile Include="DXUT11\Optional\DXUTgui.cpp">
+      <Filter>DXUT</Filter>
+    </ClCompile>
+    <ClCompile Include="DXUT11\Optional\DXUTguiIME.cpp">
+      <Filter>DXUT</Filter>
+    </ClCompile>
+    <ClCompile Include="DXUT11\Optional\DXUTres.cpp">
+      <Filter>DXUT</Filter>
+    </ClCompile>
+    <ClCompile Include="DXUT11\Optional\DXUTsettingsdlg.cpp">
+      <Filter>DXUT</Filter>
+    </ClCompile>
+    <ClCompile Include="DXUT11\Optional\ImeUi.cpp">
+      <Filter>DXUT</Filter>
+    </ClCompile>
+    <ClCompile Include="DXUT11\Optional\SDKmesh.cpp">
+      <Filter>DXUT</Filter>
+    </ClCompile>
+    <ClCompile Include="DXUT11\Optional\SDKmisc.cpp">
+      <Filter>DXUT</Filter>
+    </ClCompile>
+    <ClCompile Include="canvas.cpp">
+      <Filter>canvas</Filter>
+    </ClCompile>
+    <ClCompile Include="geommath\mat33.cpp">
+      <Filter>geommath</Filter>
+    </ClCompile>
+    <ClCompile Include="geommath\mat44.cpp">
+      <Filter>geommath</Filter>
+    </ClCompile>
+    <ClCompile Include="geommath\quaternion.cpp">
+      <Filter>geommath</Filter>
+    </ClCompile>
+    <ClCompile Include="geommath\vec3.cpp">
+      <Filter>geommath</Filter>
+    </ClCompile>
+    <ClCompile Include="geommath\vec4.cpp">
+      <Filter>geommath</Filter>
+    </ClCompile>
+    <ClCompile Include="meshimport\meshdraw.cpp">
+      <Filter>meshimport</Filter>
+    </ClCompile>
+    <ClCompile Include="meshimport\mikktspace.c">
+      <Filter>meshimport</Filter>
+    </ClCompile>
+    <ClCompile Include="meshimport\objreader.cpp">
+      <Filter>meshimport</Filter>
+    </ClCompile>
+    <ClCompile Include="meshimport\weldmesh.c">
+      <Filter>meshimport</Filter>
+    </ClCompile>
+    <ClCompile Include="scenegraph.cpp">
+      <Filter>scenegraph</Filter>
+    </ClCompile>
+    <ClCompile Include="shader.cpp">
+      <Filter>ShaderUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="shaderpipeline.cpp">
+      <Filter>ShaderUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="shaderutils.cpp">
+      <Filter>ShaderUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="shadows.cpp">
+      <Filter>shadows</Filter>
+    </ClCompile>
+    <ClCompile Include="buffer.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="texture_rt.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="hextile-demo.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="hextile-demo.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shader_basic.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shader_canvas.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shader_lighting.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shader_shadow_resolve.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{b8f5b01f-06e2-46c3-a165-2f633b883ae9}</ProjectGuid>
+    <RootNamespace>hextiledemo</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>".\"; ".\DXUT11\Core"; ".\DXUT11\Optional"</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>version.lib;imm32.lib;dxguid.lib;d3dcompiler.lib;usp10.lib;dxguid.lib;comctl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>".\"; ".\DXUT11\Core"; ".\DXUT11\Optional"</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>version.lib;imm32.lib;dxguid.lib;d3dcompiler.lib;usp10.lib;dxguid.lib;comctl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="buffer.h" />
+    <ClInclude Include="canvas.h" />
+    <ClInclude Include="canvas_common.h" />
+    <ClInclude Include="custom_cbuffers.h" />
+    <ClInclude Include="DXUT11\Core\DDSTextureLoader.h" />
+    <ClInclude Include="DXUT11\Core\dxerr.h" />
+    <ClInclude Include="DXUT11\Core\DXUT.h" />
+    <ClInclude Include="DXUT11\Core\DXUTDevice11.h" />
+    <ClInclude Include="DXUT11\Core\DXUTmisc.h" />
+    <ClInclude Include="DXUT11\Core\ScreenGrab.h" />
+    <ClInclude Include="DXUT11\Core\WICTextureLoader.h" />
+    <ClInclude Include="DXUT11\Optional\DXUTcamera.h" />
+    <ClInclude Include="DXUT11\Optional\DXUTgui.h" />
+    <ClInclude Include="DXUT11\Optional\DXUTguiIME.h" />
+    <ClInclude Include="DXUT11\Optional\DXUTLockFreePipe.h" />
+    <ClInclude Include="DXUT11\Optional\DXUTres.h" />
+    <ClInclude Include="DXUT11\Optional\DXUTsettingsdlg.h" />
+    <ClInclude Include="DXUT11\Optional\ImeUi.h" />
+    <ClInclude Include="DXUT11\Optional\SDKmesh.h" />
+    <ClInclude Include="DXUT11\Optional\SDKmisc.h" />
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="geommath\geommath.h" />
+    <ClInclude Include="geommath\mat33.h" />
+    <ClInclude Include="geommath\mat44.h" />
+    <ClInclude Include="geommath\quaternion.h" />
+    <ClInclude Include="geommath\vec3.h" />
+    <ClInclude Include="geommath\vec4.h" />
+    <ClInclude Include="hextile-demo.h" />
+    <ClInclude Include="illum.h" />
+    <ClInclude Include="meshimport\meshdraw.h" />
+    <ClInclude Include="meshimport\mikktspace.h" />
+    <ClInclude Include="meshimport\objreader.h" />
+    <ClInclude Include="meshimport\weldmesh.h" />
+    <ClInclude Include="noise.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="scenegraph.h" />
+    <ClInclude Include="shader.h" />
+    <ClInclude Include="shaderpipeline.h" />
+    <ClInclude Include="shaderutils.h" />
+    <ClInclude Include="shader_base.h" />
+    <ClInclude Include="shadows.h" />
+    <ClInclude Include="shadows_cbuffer.h" />
+    <ClInclude Include="std_cbuffer.h" />
+    <ClInclude Include="surfgrad_framework.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="texture_rt.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="buffer.cpp" />
+    <ClCompile Include="canvas.cpp" />
+    <ClCompile Include="DXUT11\Core\DDSTextureLoader.cpp" />
+    <ClCompile Include="DXUT11\Core\dxerr.cpp" />
+    <ClCompile Include="DXUT11\Core\DXUT.cpp" />
+    <ClCompile Include="DXUT11\Core\DXUTDevice11.cpp" />
+    <ClCompile Include="DXUT11\Core\DXUTmisc.cpp" />
+    <ClCompile Include="DXUT11\Core\ScreenGrab.cpp" />
+    <ClCompile Include="DXUT11\Core\WICTextureLoader.cpp" />
+    <ClCompile Include="DXUT11\Optional\DXUTcamera.cpp" />
+    <ClCompile Include="DXUT11\Optional\DXUTgui.cpp" />
+    <ClCompile Include="DXUT11\Optional\DXUTguiIME.cpp" />
+    <ClCompile Include="DXUT11\Optional\DXUTres.cpp" />
+    <ClCompile Include="DXUT11\Optional\DXUTsettingsdlg.cpp" />
+    <ClCompile Include="DXUT11\Optional\ImeUi.cpp" />
+    <ClCompile Include="DXUT11\Optional\SDKmesh.cpp" />
+    <ClCompile Include="DXUT11\Optional\SDKmisc.cpp" />
+    <ClCompile Include="geommath\mat33.cpp" />
+    <ClCompile Include="geommath\mat44.cpp" />
+    <ClCompile Include="geommath\quaternion.cpp" />
+    <ClCompile Include="geommath\vec3.cpp" />
+    <ClCompile Include="geommath\vec4.cpp" />
+    <ClCompile Include="hextile-demo.cpp" />
+    <ClCompile Include="meshimport\meshdraw.cpp" />
+    <ClCompile Include="meshimport\mikktspace.c" />
+    <ClCompile Include="meshimport\objreader.cpp" />
+    <ClCompile Include="meshimport\weldmesh.c" />
+    <ClCompile Include="scenegraph.cpp" />
+    <ClCompile Include="shader.cpp" />
+    <ClCompile Include="shaderpipeline.cpp" />
+    <ClCompile Include="shaderutils.cpp" />
+    <ClCompile Include="shadows.cpp" />
+    <ClCompile Include="texture_rt.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="hextile-demo.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="hextile-demo.ico" />
+    <Image Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shader_basic.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shader_canvas.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shader_lighting.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shader_shadow_resolve.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

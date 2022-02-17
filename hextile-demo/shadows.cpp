@@ -116,7 +116,6 @@ void CShadowMap::RenderShadowMap(ID3D11DeviceContext* pd3dImmediateContext, ID3D
 	((cbGlobals *)MappedSubResource.pData)->g_vCamPos = (~toLgt) * Vec3(0,0,0);
 	((cbGlobals *)MappedSubResource.pData)->g_iWidth = 4096;
 	((cbGlobals *)MappedSubResource.pData)->g_iHeight = 4096;
-	((cbGlobals *)MappedSubResource.pData)->g_iMode = 0;
 	((cbGlobals *)MappedSubResource.pData)->g_bShowNormalsWS = false;
 	((cbGlobals *)MappedSubResource.pData)->g_vSunDir = sunDir;
     pd3dImmediateContext->Unmap( pGlobalsCB, 0 );

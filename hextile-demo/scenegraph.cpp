@@ -28,10 +28,39 @@ enum TEX_ID
 	PIRATE_OCCLUSION,
 	PIRATE_SMOOTHNESS,
 	PIRATE_NORMALS_TS,
+	PIRATE_MASK,
 
 	ROCK_BASE_TS,
 
-	TABLE_FG,
+	TRX_JAGUAR,
+	TRX_GRASS_LONG_D=TRX_JAGUAR+4,
+	TRX_GRASS_LONG_N=TRX_GRASS_LONG_D+4,
+	TRX_GRASS_SHORT_D=TRX_GRASS_LONG_N+4,
+	TRX_GRASS_SHORT_N=TRX_GRASS_SHORT_D+4,
+	TRX_LEATHER_N=TRX_GRASS_SHORT_N+4,
+	TRX_MARBLE_BLACK_D=TRX_LEATHER_N+4,
+	TRX_MARBLE_BASE_D=TRX_MARBLE_BLACK_D+4,
+
+	TRX_MOSSGROUND_D=TRX_MARBLE_BASE_D+4,
+	TRX_MOSSGROUND_02A_D=TRX_MOSSGROUND_D+4,
+	TRX_NATURE_PEBBLES_D=TRX_MOSSGROUND_02A_D+4,
+
+	TRX_NORMAL_SAMPLE_01A_N=TRX_NATURE_PEBBLES_D+4,
+	TRX_NORMAL_SAMPLE_02A_N=TRX_NORMAL_SAMPLE_01A_N+4,
+	TRX_NORMAL_SAMPLE_03A_N=TRX_NORMAL_SAMPLE_02A_N+4,
+	TRX_NORMAL_SAMPLE_04A_N=TRX_NORMAL_SAMPLE_03A_N+4,
+	TRX_NORMAL_SAMPLE_05A_N=TRX_NORMAL_SAMPLE_04A_N+4,
+	TRX_NORMAL_SAMPLE_06A_N=TRX_NORMAL_SAMPLE_05A_N+4,
+
+	TRX_PEBBLES_BEACH_N=TRX_NORMAL_SAMPLE_06A_N+4,
+	TRX_PEBBLES_BEACH_CROP_N=TRX_PEBBLES_BEACH_N+4,
+	TRX_SEAN_MICRO_N=TRX_PEBBLES_BEACH_CROP_N+4,
+
+	TRX_SNOW_MELT_02A_N=TRX_SEAN_MICRO_N+4,
+	TRX_SNOW_MELT_04A_N=TRX_SNOW_MELT_02A_N+4,
+	TRX_SNOW_MELT_N=TRX_SNOW_MELT_04A_N+4,
+	
+	TABLE_FG = TRX_SNOW_MELT_N+4,
 
 	NUM_TEXTURES
 };
@@ -41,6 +70,7 @@ static ID3D11ShaderResourceView * g_pTexturesHandler[NUM_TEXTURES];
 enum MESH_ID
 {
 	MESH_QUAD,
+	MESH_SPHERE,
 	MESH_PIRATE,
 	MESH_ROCK,
 	
@@ -55,7 +85,8 @@ static CMeshDraw g_pMeshes[NUM_MESHES];
 
 enum DRAWABLE_ID
 {
-	GROUND_PLANE=0,
+	GROUND_EXAMPLE=0,
+	SPHERE_EXAMPLE,
 
 	PIRATE_EXAMPLE,
 	ROCK_EXAMPLE,
@@ -78,7 +109,6 @@ static DWORD g_dwShaderFlags;
 
 static CShader g_vert_shader;
 static CShader g_vert_shader_basic;
-static CShader g_vert_shader_basic_labels;
 static CShader g_pix_shader_basic_white;
 static CShader g_pix_shader[NUM_PS_VARIANTS*NUM_DRAWABLES];
 
@@ -137,11 +167,31 @@ static void SetScaleAndPos(Mat44 * matPtr, const float scale, const Vec3 &pos)
 static void SetupGroundPlanePipeline(ID3D11Device* pd3dDevice, ID3D11DeviceContext *pContext, ID3D11Buffer * pGlobalsCB)
 {
 	Mat44 mat; SetScaleAndPos(&mat, 6.0f, Vec3(g_S*3.39f+g_O, 1.28f, -0.003f) );
-	GenericPipelineSetup(pd3dDevice, pContext, pGlobalsCB, mat, MAKE_STR_PAIR(GROUND_PLANE), "SuperSimplePS");
+	GenericPipelineSetup(pd3dDevice, pContext, pGlobalsCB, mat, MAKE_STR_PAIR(GROUND_EXAMPLE), "GroundExamplePS", MAKE_STR_SIZE_PAIR(cbMatGroundShader));
 
+	HRESULT hr;
+	D3D11_MAPPED_SUBRESOURCE MappedSubResource;
+	V( pContext->Map( g_pMaterialParamsCB[GROUND_EXAMPLE], 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedSubResource ) );
+	((cbMatGroundShader *)MappedSubResource.pData)->g_fBumpIntensity = 1.0f;
+	((cbMatGroundShader *)MappedSubResource.pData)->g_fTileRate = 1.0f;
+    pContext->Unmap( g_pMaterialParamsCB[GROUND_EXAMPLE], 0 );
 	
+	g_meshResourceID[GROUND_EXAMPLE] = MESH_QUAD;
+}
 
-	g_meshResourceID[GROUND_PLANE] = MESH_QUAD;
+static void SetupSpherePrimPipeline(ID3D11Device* pd3dDevice, ID3D11DeviceContext *pContext, ID3D11Buffer * pGlobalsCB)
+{
+	Mat44 mat; SetScaleAndPos(&mat, 1.5f, Vec3(g_S*3.39f+g_O - 3.5, 1.28f+1.5, -0.003f + 4.5) );
+	GenericPipelineSetup(pd3dDevice, pContext, pGlobalsCB, mat, MAKE_STR_PAIR(SPHERE_EXAMPLE), "SphereExamplePS", MAKE_STR_SIZE_PAIR(cbMatSphereShader));
+
+	HRESULT hr;
+	D3D11_MAPPED_SUBRESOURCE MappedSubResource;
+	V( pContext->Map( g_pMaterialParamsCB[SPHERE_EXAMPLE], 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedSubResource ) );
+	((cbMatSphereShader *)MappedSubResource.pData)->g_fBumpIntensity = 1.0f;
+	((cbMatSphereShader *)MappedSubResource.pData)->g_fTileRate = 1.0f;
+    pContext->Unmap( g_pMaterialParamsCB[SPHERE_EXAMPLE], 0 );
+	
+	g_meshResourceID[SPHERE_EXAMPLE] = MESH_SPHERE;
 }
 
 
@@ -151,7 +201,7 @@ static void SetupPirateExamplePipeline(ID3D11Device* pd3dDevice, ID3D11DeviceCon
 	Mat44 rotY; LoadIdentity(&rotY);
 	LoadRotation(&rotY, 0.0f, -M_PI/2.0f, 0.0f);
 	mat = rotY * mat;
-	SetColumn(&mat, 3, Vec4(g_S*-0.007558346f+g_O,2.237f, -2.74f, 1.0f));
+	SetColumn(&mat, 3, Vec4(g_S*-0.007558346f+g_O - 8, 2.237f, -2.74f+2, 1.0f));
 
 	GenericPipelineSetup(pd3dDevice, pContext, pGlobalsCB, mat, MAKE_STR_PAIR(PIRATE_EXAMPLE), "PirateExamplePS", MAKE_STR_SIZE_PAIR(cbMatPirateShader));
 
@@ -161,6 +211,7 @@ static void SetupPirateExamplePipeline(ID3D11Device* pd3dDevice, ID3D11DeviceCon
 		g_ShaderPipelines[i*NUM_DRAWABLES+PIRATE_EXAMPLE].RegisterResourceView("g_albedo_tex", g_pTexturesHandler[PIRATE_ALBEDO]);
 		g_ShaderPipelines[i*NUM_DRAWABLES+PIRATE_EXAMPLE].RegisterResourceView("g_smoothness_tex", g_pTexturesHandler[PIRATE_SMOOTHNESS]);
 		g_ShaderPipelines[i*NUM_DRAWABLES+PIRATE_EXAMPLE].RegisterResourceView("g_ao_tex", g_pTexturesHandler[PIRATE_OCCLUSION]);
+		g_ShaderPipelines[i*NUM_DRAWABLES+PIRATE_EXAMPLE].RegisterResourceView("g_mask_tex", g_pTexturesHandler[PIRATE_MASK]);
 	}
 
 	HRESULT hr;
@@ -176,7 +227,7 @@ static void SetupPirateExamplePipeline(ID3D11Device* pd3dDevice, ID3D11DeviceCon
 
 static void SetupRockPipeline(ID3D11Device* pd3dDevice, ID3D11DeviceContext *pContext, ID3D11Buffer * pGlobalsCB)
 {
-	Mat44 mat; SetScaleAndPos(&mat, 0.01*0.15f, Vec3(g_S*3.957f+g_O - 3.3, 0.119f + 2, 3.133f + 0.1f) );
+	Mat44 mat; SetScaleAndPos(&mat, 0.01*0.15f, Vec3(g_S*3.957f+g_O - 3.3 - 0.5, 0.119f + 2, 3.133f + 0.1f - 2) );
 	const float deg2rad = M_PI/180.0f;
 	Mat44 rot; LoadIdentity(&rot);
 
@@ -185,7 +236,7 @@ static void SetupRockPipeline(ID3D11Device* pd3dDevice, ID3D11DeviceContext *pCo
 	mat = mat * rot;
 
 
-	GenericPipelineSetup(pd3dDevice, pContext, pGlobalsCB, mat, MAKE_STR_PAIR(ROCK_EXAMPLE), "SuperSimplePS", MAKE_STR_SIZE_PAIR(cbMatRockShader));
+	GenericPipelineSetup(pd3dDevice, pContext, pGlobalsCB, mat, MAKE_STR_PAIR(ROCK_EXAMPLE), "RockExamplePS", MAKE_STR_SIZE_PAIR(cbMatRockShader));
 
 	for(int i=0; i<NUM_PS_VARIANTS; i++)
 	{
@@ -195,7 +246,8 @@ static void SetupRockPipeline(ID3D11Device* pd3dDevice, ID3D11DeviceContext *pCo
 	HRESULT hr;
 	D3D11_MAPPED_SUBRESOURCE MappedSubResource;
 	V( pContext->Map( g_pMaterialParamsCB[ROCK_EXAMPLE], 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedSubResource ) );
-	((cbMatRockShader *)MappedSubResource.pData)->g_iPad0 = 0;
+	((cbMatRockShader *)MappedSubResource.pData)->g_fBumpIntensity = 1.0f;
+	((cbMatRockShader *)MappedSubResource.pData)->g_fTileRate = 1.0f;
     pContext->Unmap( g_pMaterialParamsCB[ROCK_EXAMPLE], 0 );
 
 
@@ -206,7 +258,6 @@ static void SetupRockPipeline(ID3D11Device* pd3dDevice, ID3D11DeviceContext *pCo
 
 static bool ImportTexture(ID3D11Device* pd3dDevice, ID3D11DeviceContext *pContext, const int resourceIdx, const WCHAR path[], const WCHAR name[], const bool sRGB=false)
 {
-	
 	WCHAR dest_str[256];
 	wcscpy(dest_str, path);
 	wcscat(dest_str, name);
@@ -214,12 +265,59 @@ static bool ImportTexture(ID3D11Device* pd3dDevice, ID3D11DeviceContext *pContex
 	HRESULT hr;
 
 	CDXUTResourceCache &cache = DXUTGetGlobalResourceCache();
-	V_RETURN( cache.CreateTextureFromFile(pd3dDevice, pContext, dest_str, &g_pTexturesHandler[resourceIdx], sRGB) );
+	V( cache.CreateTextureFromFile(pd3dDevice, pContext, dest_str, &g_pTexturesHandler[resourceIdx], sRGB) );
 
 	//V_RETURN(DXUTCreateShaderResourceViewFromFile(pd3dDevice, dest_str, &g_pTexturesHandler[resourceIdx]));
 
-	int iTing;
-	iTing = 0;
+	return hr==S_OK;
+}
+
+static bool ImportTextureTRX(ID3D11Device* pd3dDevice, ID3D11DeviceContext *pContext, const int resourceIdx, const WCHAR path[], const WCHAR name[], const bool sRGB)
+{
+	bool res = false;
+
+	const int len = wcslen(name);
+	int nrStrip = 0;
+	while(nrStrip<5 && nrStrip<len && !res)
+	{
+		if(name[len-1-nrStrip]==L'.') res = true;
+		else ++nrStrip;
+	}
+
+	if(res)
+	{
+		res &= ImportTexture(pd3dDevice, pContext, resourceIdx+0, path, name, sRGB);
+
+		if(res)
+		{
+			int nrToCopy = len-1-nrStrip;
+			WCHAR dest_str[256];
+			WCHAR str_tmp[256];
+
+			wcsncpy(str_tmp, name, nrToCopy);
+			wcscpy(str_tmp+nrToCopy, L"");
+
+			wcscpy(dest_str, str_tmp);
+			wcscat(dest_str, L"_transfer.png");
+			res &= ImportTexture(pd3dDevice, pContext, resourceIdx+1, path, dest_str);
+
+			if(res)
+			{
+				wcscpy(dest_str, str_tmp);
+				wcscat(dest_str, L"_invtransfer.dds");
+				res &= ImportTexture(pd3dDevice, pContext, resourceIdx+2, path, dest_str);
+
+				if(res)
+				{
+					wcscpy(dest_str, str_tmp);
+					wcscat(dest_str, L"_basis.dds");
+					res &= ImportTexture(pd3dDevice, pContext, resourceIdx+3, path, dest_str);
+				}
+			}
+		}
+	}
+
+	return res;
 }
 
 static bool CreateNoiseData(ID3D11Device* pd3dDevice);
@@ -231,16 +329,51 @@ bool InitResources(ID3D11Device* pd3dDevice, ID3D11DeviceContext *pContext, ID3D
 	ImportTexture(pd3dDevice, pContext, PIRATE_OCCLUSION, L"textures/Pirate/", L"Pirate_occlusion.png");
 	ImportTexture(pd3dDevice, pContext, PIRATE_SMOOTHNESS, L"textures/Pirate/", L"Pirate_Smoothness.png");
 	ImportTexture(pd3dDevice, pContext, PIRATE_NORMALS_TS, L"textures/Pirate/", L"Pirate_ts_normals.png");
+	ImportTexture(pd3dDevice, pContext, PIRATE_MASK, L"textures/Pirate/", L"Pirate_Mask_rgb.png");
 	
 	ImportTexture(pd3dDevice, pContext, ROCK_BASE_TS, L"textures/Rock/", L"Rock_Overgrown_A_Normal.tif");
 	
 	ImportTexture(pd3dDevice, pContext, TABLE_FG, L"textures/sky/", L"tableFG.dds");
-	
+
+	// import tileables with histogram-preserving attachments
+	ImportTextureTRX(pd3dDevice, pContext, TRX_JAGUAR, L"textures/details/", L"JaguarTile.jpg", true);
+	ImportTextureTRX(pd3dDevice, pContext, TRX_GRASS_LONG_D, L"textures/details/", L"grass_green_long_d.png", true);
+	ImportTextureTRX(pd3dDevice, pContext, TRX_GRASS_LONG_N, L"textures/details/", L"grass_green_long_n.png", false);
+	ImportTextureTRX(pd3dDevice, pContext, TRX_GRASS_SHORT_D, L"textures/details/", L"grass_short_01a_d.png", true);
+	ImportTextureTRX(pd3dDevice, pContext, TRX_GRASS_SHORT_N, L"textures/details/", L"grass_short_01a_n.png", false);
+
+	ImportTextureTRX(pd3dDevice, pContext, TRX_LEATHER_N, L"textures/details/", L"leather_tile_Normal.png", false);
+
+	ImportTextureTRX(pd3dDevice, pContext, TRX_MARBLE_BLACK_D, L"textures/details/", L"Marble_SlabBlack_1K_d.png", true);
+	ImportTextureTRX(pd3dDevice, pContext, TRX_MARBLE_BASE_D, L"textures/details/", L"MarbleBase0051_2k.png", true);
+
+	ImportTextureTRX(pd3dDevice, pContext, TRX_MOSSGROUND_D, L"textures/details/", L"moss_ground_1k_tile.png", true);
+	ImportTextureTRX(pd3dDevice, pContext, TRX_MOSSGROUND_02A_D, L"textures/details/", L"moss_ground_02a_d.png", true);
+	ImportTextureTRX(pd3dDevice, pContext, TRX_NATURE_PEBBLES_D, L"textures/details/", L"Nature_Pebbles_4K_d.png", true);
+
+	ImportTextureTRX(pd3dDevice, pContext, TRX_NORMAL_SAMPLE_01A_N, L"textures/details/", L"normal_sample_n_01a.png", false);
+	ImportTextureTRX(pd3dDevice, pContext, TRX_NORMAL_SAMPLE_02A_N, L"textures/details/", L"normal_sample_n_02a.png", false);
+	ImportTextureTRX(pd3dDevice, pContext, TRX_NORMAL_SAMPLE_03A_N, L"textures/details/", L"normal_sample_n_03a.png", false);
+	ImportTextureTRX(pd3dDevice, pContext, TRX_NORMAL_SAMPLE_04A_N, L"textures/details/", L"normal_sample_n_04a.png", false);
+	ImportTextureTRX(pd3dDevice, pContext, TRX_NORMAL_SAMPLE_05A_N, L"textures/details/", L"normal_sample_n_05a.png", false);
+	ImportTextureTRX(pd3dDevice, pContext, TRX_NORMAL_SAMPLE_06A_N, L"textures/details/", L"normal_sample_n_06a.png", false);
+
+
+	ImportTextureTRX(pd3dDevice, pContext, TRX_PEBBLES_BEACH_N, L"textures/details/", L"pebbles_beach_01a_n.png", false);
+	ImportTextureTRX(pd3dDevice, pContext, TRX_PEBBLES_BEACH_CROP_N, L"textures/details/", L"pebbles_beach_crop_01a_n.png", false);
+
+	ImportTextureTRX(pd3dDevice, pContext, TRX_SEAN_MICRO_N, L"textures/details/", L"Sean_Micro_Normal.png", false);
+
+	ImportTextureTRX(pd3dDevice, pContext, TRX_SNOW_MELT_02A_N, L"textures/details/", L"snow_melt_02a_n.png", false);
+	ImportTextureTRX(pd3dDevice, pContext, TRX_SNOW_MELT_04A_N, L"textures/details/", L"snow_melt_04a_n.png", false);
+	ImportTextureTRX(pd3dDevice, pContext, TRX_SNOW_MELT_N, L"textures/details/", L"snow_melt_Normal.png", false);
+
 
 
 	// import raw mesh data
 	bool res = true;
 	res &= g_pMeshes[MESH_QUAD].ReadObj(pd3dDevice, MODEL_PATH "quad.obj", 1.0f, true);
+	res &= g_pMeshes[MESH_SPHERE].ReadObj(pd3dDevice, MODEL_PATH "sphere.obj", 1.0f, true);
 	res &= g_pMeshes[MESH_PIRATE].ReadObj(pd3dDevice, MODEL_PATH "LP_Pirate.obj", 1.0f, false);
 	res &= g_pMeshes[MESH_ROCK].ReadObj(pd3dDevice, MODEL_PATH "Rock_Overgrown_A.obj", 1.0f, true);
 
@@ -261,7 +394,6 @@ bool InitResources(ID3D11Device* pd3dDevice, ID3D11DeviceContext *pContext, ID3D
 	g_vert_shader_basic.CompileShaderFunction(pd3dDevice, L"shader_basic.hlsl", pDefines, "RenderSceneVS", "vs_5_0", g_dwShaderFlags );
 
 	// labels shader
-	g_vert_shader_basic_labels.CompileShaderFunction(pd3dDevice, L"shader_basic.hlsl", pDefines, "RenderSceneLabelsVS", "vs_5_0", g_dwShaderFlags );
 	g_pix_shader_basic_white.CompileShaderFunction(pd3dDevice, L"shader_basic.hlsl", pDefines, "WhitePS", "ps_5_0", g_dwShaderFlags );
 
 	// noise data
@@ -329,6 +461,7 @@ bool InitResources(ID3D11Device* pd3dDevice, ID3D11DeviceContext *pContext, ID3D
 
 
 	SetupGroundPlanePipeline(pd3dDevice, pContext, pGlobalsCB);
+	SetupSpherePrimPipeline(pd3dDevice, pContext, pGlobalsCB);
 	SetupPirateExamplePipeline(pd3dDevice, pContext, pGlobalsCB);
 	SetupRockPipeline(pd3dDevice, pContext, pGlobalsCB);
 	
@@ -340,8 +473,75 @@ bool InitResources(ID3D11Device* pd3dDevice, ID3D11DeviceContext *pContext, ID3D
 		}
 	}
 
+	ToggleDetailTex(true);
+	ToggleDetailTex(false);
+
 
 	return res;
+}
+
+void ToggleDetailTex(bool toggleIsForColor)
+{
+	static int offs_d = 0;
+	static int offs_n = 0;
+
+	if(toggleIsForColor) ++offs_d;
+	else ++offs_n;
+
+	const int indices_d[] =
+	{
+		TRX_JAGUAR,
+		TRX_GRASS_LONG_D,
+		TRX_GRASS_SHORT_D,
+
+		TRX_MARBLE_BLACK_D,
+		TRX_MARBLE_BASE_D,
+
+		TRX_MOSSGROUND_D,
+		TRX_MOSSGROUND_02A_D,
+		TRX_NATURE_PEBBLES_D
+	};
+
+	const int indices_n[] =
+	{
+		TRX_GRASS_LONG_N,
+		TRX_GRASS_SHORT_N,
+		TRX_LEATHER_N,
+
+		TRX_NORMAL_SAMPLE_01A_N,
+		TRX_NORMAL_SAMPLE_02A_N,
+		TRX_NORMAL_SAMPLE_03A_N,
+		TRX_NORMAL_SAMPLE_04A_N,
+		TRX_NORMAL_SAMPLE_05A_N,
+		TRX_NORMAL_SAMPLE_06A_N,
+
+		TRX_PEBBLES_BEACH_N,
+		TRX_PEBBLES_BEACH_CROP_N,
+		TRX_SEAN_MICRO_N,
+
+		TRX_SNOW_MELT_02A_N,
+		TRX_SNOW_MELT_04A_N,
+		TRX_SNOW_MELT_N
+	};
+
+	const int nrColorTex = sizeof(indices_d) / sizeof(int);
+	const int nrNormalTex = sizeof(indices_n) / sizeof(int);
+
+
+	for(int i=0; i<NUM_DRAWABLES; i++)
+	{
+		const int idxD = (offs_d+i)%nrColorTex;
+		const int idxN = (offs_n+i)%nrNormalTex;
+		const int idx = toggleIsForColor ? indices_d[idxD] : indices_n[idxN];
+
+		for(int j=0; j<NUM_PS_VARIANTS; j++)
+		{
+			g_ShaderPipelines[j*NUM_DRAWABLES+i].RegisterResourceView(toggleIsForColor ? "g_trx_d" : "g_trx_n", g_pTexturesHandler[idx+0]);
+			g_ShaderPipelines[j*NUM_DRAWABLES+i].RegisterResourceView(toggleIsForColor ? "g_trx_transfer_d" : "g_trx_transfer_n", g_pTexturesHandler[idx+1]);
+			g_ShaderPipelines[j*NUM_DRAWABLES+i].RegisterResourceView(toggleIsForColor ? "g_trx_invtransfer_d" : "g_trx_invtransfer_n", g_pTexturesHandler[idx+2]);
+			g_ShaderPipelines[j*NUM_DRAWABLES+i].RegisterResourceView(toggleIsForColor ? "g_trx_basis_d" : "g_trx_basis_n", g_pTexturesHandler[idx+3]);
+		}
+	}
 }
 
 void PassShadowResolve(ID3D11ShaderResourceView * pShadowResolveSRV)
@@ -443,7 +643,7 @@ void RenderSceneGraph(ID3D11DeviceContext *pContext, bool bSimpleLayout, bool bS
 {
 	for(int i=0; i<NUM_DRAWABLES; i++)
 	{
-		if((!bSkipGroundPlane) || i!=GROUND_PLANE)
+		if((!bSkipGroundPlane) || i!=GROUND_EXAMPLE)
 		{
 			CShaderPipeline &pipe = g_ShaderPipelines[0*NUM_DRAWABLES+i];
 
@@ -509,7 +709,6 @@ void ReleaseSceneGraph()
 
 	g_vert_shader.CleanUp();
 	g_vert_shader_basic.CleanUp();
-	g_vert_shader_basic_labels.CleanUp();
 	g_pix_shader_basic_white.CleanUp();
 
 	for(int i=0; i<NUM_DRAWABLES; i++)

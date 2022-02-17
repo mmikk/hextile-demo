@@ -61,7 +61,7 @@ float4 ShadowResolvePS( VS_OUTPUT In ) : SV_TARGET0
 	// shadow map space
 	float3 smp = mul(float4(surfPosInWorld.xyz,1.0), g_mWorldToShadowMap).xyz;
 #if 1
-	float res = g_shadowMap.SampleCmpLevelZero(g_samShadow, smp.xy, smp.z-0.001).x;
+	float res = g_shadowMap.SampleCmpLevelZero(g_samShadow, smp.xy, smp.z-2.5*0.001).x;
 #else
 	float2 jitter[25] = {
 		float2(0.563585, 0.001251), float2(0.808740, 0.193304), float2(0.479873, 0.585009), float2(0.895962, 0.350291), float2(0.746605, 0.822840), float2(0.858943, 0.174108), float2(0.513535, 0.710501), float2(0.014985, 0.303995), float2(0.364452, 0.091403), float2(0.165899, 0.147313), float2(0.445692, 0.988525), float2(0.004669, 0.119083), float2(0.377880, 0.008911), float2(0.571184, 0.531663), float2(0.607166, 0.601764), float2(0.663045, 0.166234), float2(0.352123, 0.450789), float2(0.607685, 0.057039), float2(0.802606, 0.783319), float2(0.301950, 0.519883), float2(0.726676, 0.875973), float2(0.925718, 0.955901), float2(0.142338, 0.539354), float2(0.235328, 0.462081), float2(0.209601, 0.862239) };

@@ -20,5 +20,6 @@ struct Mat44;
 
 int GetNumberOfShadowCastingMeshInstances();
 void GetAABBoxAndTransformOfShadowCastingMeshInstance(Vec3 * pvMin, Vec3 * pvMax, Mat44 * pmMat, const int idx_in);
+void ToggleDetailTex(bool toggleIsForColor);
 
 #endif

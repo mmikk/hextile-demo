@@ -13,7 +13,7 @@ unistruct cbMeshInstance
 unistruct cbGlobals
 {
 	Vec3	g_vCamPos;
-	int		g_iMode;
+	int		g_iPadQ;
 
 	Mat44	g_mProj;
 	Mat44	g_mViewProjection;
@@ -28,6 +28,15 @@ unistruct cbGlobals
 
 	Vec3	g_vSunDir;
 	int		g_bIndirectSpecular;
+
+	int		g_bHexColorEnabled;
+	int		g_bHexNormalEnabled;
+	int		g_bUseHistoPreserv;
+	int		g_useRegularTiling;
+
+	float	g_DetailTileRate;
+	float	g_FakeContrast;
+
 };
 
 #endif

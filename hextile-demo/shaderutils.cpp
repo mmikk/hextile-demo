@@ -49,16 +49,17 @@ bool InitUtils(ID3D11Device* pd3dDevice)
 	// Create samplers
 	D3D11_SAMPLER_DESC SSDesc;
     ZeroMemory( &SSDesc, sizeof( D3D11_SAMPLER_DESC ) );
-    SSDesc.Filter =         D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+    SSDesc.Filter =         D3D11_FILTER_ANISOTROPIC;
     SSDesc.AddressU =       D3D11_TEXTURE_ADDRESS_WRAP;
     SSDesc.AddressV =       D3D11_TEXTURE_ADDRESS_WRAP;
     SSDesc.AddressW =       D3D11_TEXTURE_ADDRESS_WRAP;
     SSDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-    SSDesc.MaxAnisotropy =  16;
+    SSDesc.MaxAnisotropy =  3;//16;
     SSDesc.MinLOD =         0;
     SSDesc.MaxLOD =         D3D11_FLOAT32_MAX;
     V_RETURN( pd3dDevice->CreateSamplerState( &SSDesc, &g_pSamplerStateWrap) );
 
+	SSDesc.Filter =         D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 	SSDesc.AddressU =       D3D11_TEXTURE_ADDRESS_CLAMP;
     SSDesc.AddressV =       D3D11_TEXTURE_ADDRESS_CLAMP;
     SSDesc.AddressW =       D3D11_TEXTURE_ADDRESS_CLAMP;

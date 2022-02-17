@@ -4,18 +4,29 @@
 #include "shader_base.h"
 
 
-#if defined(BASIC_SAMPLE) || defined(__cplusplus)
-unistruct cbMatBasicShader
+
+#if defined(GROUND_EXAMPLE) || defined(__cplusplus)
+unistruct cbMatGroundShader
 {
 	float g_fTileRate;
 	float g_fBumpIntensity;
 };
 #endif
 
+#if defined(SPHERE_EXAMPLE) || defined(__cplusplus)
+unistruct cbMatSphereShader
+{
+	float g_fTileRate;
+	float g_fBumpIntensity;
+};
+#endif
+
+
 #if defined(ROCK_EXAMPLE) || defined(__cplusplus)
 unistruct cbMatRockShader
 {
-	int g_iPad0;
+	float g_fTileRate;
+	float g_fBumpIntensity;
 };
 #endif
 

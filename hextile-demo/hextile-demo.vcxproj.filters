@@ -180,6 +180,9 @@
     <ClInclude Include="texture_rt.h">
       <Filter>Texture</Filter>
     </ClInclude>
+    <ClInclude Include="hextiling.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="hextile-demo.cpp">

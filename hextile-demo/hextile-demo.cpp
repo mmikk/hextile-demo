@@ -70,13 +70,17 @@ void myFrustum(float * pMat, const float fLeft, const float fRight, const float 
 
 static int g_iCullMethod = 1;
 
-static int g_iVisualMode = 1;
 
 static int g_iMenuVisib = 1;
 
 static bool g_bShowNormalsWS = false;
 static bool g_bIndirectSpecular = true;
 static bool g_bEnableShadows = true;
+
+static bool g_bHexColEnabled = true;
+static bool g_bHexNormalEnabled = false;
+static bool g_bHistoPreservEnabled = false;
+static bool g_bRegularTilingEnabled = false;
 
 
 //static float frnd() { return (float) (((double) (rand() % (RAND_MAX+1))) / RAND_MAX); }
@@ -147,14 +151,32 @@ void RenderText()
 		if(g_bEnableShadows)
 			g_pTxtHelper->DrawTextLine(L"Shadows enabled (toggle using i)\n");
 		else g_pTxtHelper->DrawTextLine(L"Shadows disabled (toggle using i)\n");
-	
+
+		// C
+		if(g_bHexColEnabled)
+			g_pTxtHelper->DrawTextLine(L"hex colors enabled (toggle using c)\n");
+		else g_pTxtHelper->DrawTextLine(L"hex colors disabled (toggle using c)\n");
+
+		// B
+		if(g_bHexNormalEnabled)
+			g_pTxtHelper->DrawTextLine(L"hex normals enabled (toggle using b)\n");
+		else g_pTxtHelper->DrawTextLine(L"hex normals disabled (toggle using b)\n");
+
+		// H
+		if(g_bHistoPreservEnabled)
+			g_pTxtHelper->DrawTextLine(L"Histogram-Preservation enabled (toggle using h)\n");
+		else g_pTxtHelper->DrawTextLine(L"Histogram-Preservation disabled (toggle using h)\n");
+
+
+		// T
+		if(g_bRegularTilingEnabled)
+			g_pTxtHelper->DrawTextLine(L"Regular tiling enabled (toggle using t)\n");
+		else g_pTxtHelper->DrawTextLine(L"Regular tiling disabled (toggle using t)\n");
+
 	}
 
 	g_pTxtHelper->End();
 }
-
-
-float Lerp(const float fA, const float fB, const float fT) { return fA*(1-fT) + fB*fT; }
 
 
 void render_surface(ID3D11DeviceContext* pd3dImmediateContext, bool bSimpleLayout)
@@ -237,11 +259,19 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 	((cbGlobals *)MappedSubResource.pData)->g_vCamPos = view_to_world * Vec3(0,0,0);
 	((cbGlobals *)MappedSubResource.pData)->g_iWidth = DXUTGetDXGIBackBufferSurfaceDesc()->Width;
 	((cbGlobals *)MappedSubResource.pData)->g_iHeight = DXUTGetDXGIBackBufferSurfaceDesc()->Height;
-	((cbGlobals *)MappedSubResource.pData)->g_iMode = g_iVisualMode;
 	((cbGlobals *)MappedSubResource.pData)->g_bShowNormalsWS = g_bShowNormalsWS;
 	((cbGlobals *)MappedSubResource.pData)->g_bIndirectSpecular = g_bIndirectSpecular;
 	((cbGlobals *)MappedSubResource.pData)->g_vSunDir = GetSunDir();
 	((cbGlobals *)MappedSubResource.pData)->g_bEnableShadows = g_bEnableShadows;
+
+
+	((cbGlobals *)MappedSubResource.pData)->g_bHexColorEnabled = g_bHexColEnabled;
+	((cbGlobals *)MappedSubResource.pData)->g_bHexNormalEnabled = g_bHexNormalEnabled;
+	((cbGlobals *)MappedSubResource.pData)->g_bUseHistoPreserv = g_bHistoPreservEnabled;
+	((cbGlobals *)MappedSubResource.pData)->g_useRegularTiling = g_bRegularTilingEnabled;
+	((cbGlobals *)MappedSubResource.pData)->g_DetailTileRate = 10.0f;
+	((cbGlobals *)MappedSubResource.pData)->g_FakeContrast = 0.5f;
+
     pd3dImmediateContext->Unmap( g_pGlobalsCB, 0 );
 
 	
@@ -484,8 +514,14 @@ void CALLBACK OnKeyboard( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserC
 	{
 		if(nChar=='O')
 		{
-			g_iVisualMode = 1-g_iVisualMode;
+			ToggleDetailTex(true);
 		}
+		if(nChar=='P')
+		{
+			ToggleDetailTex(false);
+		}
+
+		
 
 		if (nChar == 'X')
 		{
@@ -505,6 +541,26 @@ void CALLBACK OnKeyboard( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserC
 		if (nChar == 'I')
 		{
 			g_bEnableShadows = !g_bEnableShadows;
+		}
+
+		if (nChar == 'C')
+		{
+			g_bHexColEnabled = !g_bHexColEnabled;
+		}
+
+		if (nChar == 'B')
+		{
+			g_bHexNormalEnabled = !g_bHexNormalEnabled;
+		}
+
+		if (nChar == 'H')
+		{
+			g_bHistoPreservEnabled = !g_bHistoPreservEnabled;
+		}
+
+		if (nChar == 'T')
+		{
+			g_bRegularTilingEnabled = !g_bRegularTilingEnabled;
 		}
 
 	}

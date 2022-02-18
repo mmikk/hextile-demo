@@ -301,7 +301,7 @@ float4 GroundExamplePS( VS_OUTPUT In ) : SV_TARGET0
 
 	float3 vN = nrmBaseNormal;
 
-	float2 st0 = 3*g_DetailTileRate*In.TextureUV.xy;
+	float2 st0 = 20*g_DetailTileRate*In.TextureUV.xy;
 
 	if(g_bHexColorEnabled)
 	{
@@ -358,7 +358,7 @@ float4 GroundExamplePS( VS_OUTPUT In ) : SV_TARGET0
 		vN = ResolveNormalFromSurfaceGradient(surfGrad);
 	}
 
-	return float4(Epilogue(In, vN, albedo, 0.4),1);
+	return float4(Epilogue(In, vN, albedo),1);
 }
 #endif
 
@@ -451,12 +451,13 @@ float3 Epilogue(VS_OUTPUT In, float3 vN, float3 albedo, float smoothness, float 
 	float shadow = g_bEnableShadows ? g_shadowResolve[uCoord].x : 1.0;
 	float3 vVdir = normalize( mul(-surfPosInView, (float3x3) g_mViewToWorld) );
 	float3 vLdir = -g_vSunDir;			  // 31, -30
-	const float lightIntensity = 1.5*M_PI;		// 2.35
+	const float lightIntensity = 2.5*M_PI;		// 2.35
 	//float3 col = shadow*lightIntensity*float3(1,0.95,0.85)*BRDF2_ts_nphong(vNfinal, nrmBaseNormal, vLdir, vVdir, albedo, float3(1,1,1), spow);
 	float3 col = shadow*lightIntensity*BRDF2_ts_ggx(vNfinal, nrmBaseNormal, vLdir, vVdir, albedo, float3(1,1,1), smoothness);
 
 	// old school cheesy ambientish effect
-	col += albedo*ao*IncomingEnergy(vNfinal);
+	float mult = 0.2;
+	col += mult*albedo*ao*IncomingEnergy(vNfinal);
 
 	if(g_bIndirectSpecular)
 	{
@@ -467,10 +468,11 @@ float3 Epilogue(VS_OUTPUT In, float3 vN, float3 albedo, float smoothness, float 
 		float specColor = 0.04;
 	
 		float specularOcc = ApproximateSpecularSelfOcclusion(vRspec, nrmBaseNormal);
-		col += specularOcc*(tab_fg.x*specColor + tab_fg.y)*IncomingEnergy(vRspec);
+		col += mult*specularOcc*(tab_fg.x*specColor + tab_fg.y)*IncomingEnergy(vRspec);
 	}
 
-	
+	col *= 0.5;
+
 	if(g_bShowNormalsWS) col = pow(0.5*vNfinal+0.5, 2.2);
 
 	//col = pow(0.5*(70*dPdy)+0.5, 2.2);

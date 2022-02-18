@@ -49,7 +49,7 @@ bool InitUtils(ID3D11Device* pd3dDevice)
 	// Create samplers
 	D3D11_SAMPLER_DESC SSDesc;
     ZeroMemory( &SSDesc, sizeof( D3D11_SAMPLER_DESC ) );
-    SSDesc.Filter =         D3D11_FILTER_ANISOTROPIC;
+    SSDesc.Filter =         D3D11_FILTER_MIN_MAG_MIP_LINEAR;//D3D11_FILTER_ANISOTROPIC;
     SSDesc.AddressU =       D3D11_TEXTURE_ADDRESS_WRAP;
     SSDesc.AddressV =       D3D11_TEXTURE_ADDRESS_WRAP;
     SSDesc.AddressW =       D3D11_TEXTURE_ADDRESS_WRAP;

@@ -373,13 +373,13 @@ HRESULT CALLBACK OnD3D11ResizedSwapChain( ID3D11Device* pd3dDevice, IDXGISwapCha
 
 	//const float fFov = 30;
 	const float fNear = 10 * scale;
-	const float fFar = 10000 * scale;
+	const float fFar = 100000 * scale;
 	//const float fNear = 45;//275;
 	//const float fFar = 65;//500;
 	//const float fHalfWidthAtMinusNear = fNear * tanf((fFov*((float) M_PI))/360);
 	//const float fHalfHeightAtMinusNear = fHalfWidthAtMinusNear * (((float) 3)/4.0);
 
-	const float fFov = 2*23;
+	const float fFov = 60;
 	const float fHalfHeightAtMinusNear = fNear * tanf((fFov*((float) M_PI))/360);
 	const float fHalfWidthAtMinusNear = fHalfHeightAtMinusNear * (((float) w)/h);
 	

@@ -166,7 +166,7 @@ static void SetScaleAndPos(Mat44 * matPtr, const float scale, const Vec3 &pos)
 
 static void SetupGroundPlanePipeline(ID3D11Device* pd3dDevice, ID3D11DeviceContext *pContext, ID3D11Buffer * pGlobalsCB)
 {
-	Mat44 mat; SetScaleAndPos(&mat, 6.0f, Vec3(g_S*3.39f+g_O, 1.28f, -0.003f) );
+	Mat44 mat; SetScaleAndPos(&mat, 30*6.0f, Vec3(g_S*3.39f+g_O, 1.28f, -0.003f) );
 	GenericPipelineSetup(pd3dDevice, pContext, pGlobalsCB, mat, MAKE_STR_PAIR(GROUND_EXAMPLE), "GroundExamplePS", MAKE_STR_SIZE_PAIR(cbMatGroundShader));
 
 	HRESULT hr;
@@ -491,20 +491,20 @@ void ToggleDetailTex(bool toggleIsForColor)
 	const int indices_d[] =
 	{
 		TRX_JAGUAR,
-		TRX_GRASS_LONG_D,
+		//TRX_GRASS_LONG_D,
 		TRX_GRASS_SHORT_D,
 
-		TRX_MARBLE_BLACK_D,
+		//TRX_MARBLE_BLACK_D,
 		TRX_MARBLE_BASE_D,
 
 		TRX_MOSSGROUND_D,
-		TRX_MOSSGROUND_02A_D,
+		//TRX_MOSSGROUND_02A_D,
 		TRX_NATURE_PEBBLES_D
 	};
 
 	const int indices_n[] =
 	{
-		TRX_GRASS_LONG_N,
+		/*TRX_GRASS_LONG_N,
 		TRX_GRASS_SHORT_N,
 		TRX_LEATHER_N,
 
@@ -515,13 +515,13 @@ void ToggleDetailTex(bool toggleIsForColor)
 		TRX_NORMAL_SAMPLE_05A_N,
 		TRX_NORMAL_SAMPLE_06A_N,
 
-		TRX_PEBBLES_BEACH_N,
+		TRX_PEBBLES_BEACH_N,*/
 		TRX_PEBBLES_BEACH_CROP_N,
 		TRX_SEAN_MICRO_N,
 
 		TRX_SNOW_MELT_02A_N,
-		TRX_SNOW_MELT_04A_N,
-		TRX_SNOW_MELT_N
+		TRX_SNOW_MELT_04A_N//,
+		//TRX_SNOW_MELT_N
 	};
 
 	const int nrColorTex = sizeof(indices_d) / sizeof(int);
@@ -683,6 +683,9 @@ bool InitializeSceneGraph(ID3D11Device* pd3dDevice, ID3D11DeviceContext *pContex
 	//Vec3 g_vSunDir = -Normalize(Vec3(-2.0f,2.0f,-2.5f));
 	//Vec3 g_vSunDir = GetColumn(sunRot2, 2); g_vSunDir.x=-g_vSunDir.x;		// matches direction in Unity sample
 	g_vSunDir = GetColumn(sunRot3, 2); g_vSunDir.x=-g_vSunDir.x;
+
+	g_vSunDir.y -= 0.04f;
+	g_vSunDir = Normalize(g_vSunDir);
 
 
 	return res;

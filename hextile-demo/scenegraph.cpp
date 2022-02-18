@@ -490,16 +490,16 @@ void ToggleDetailTex(bool toggleIsForColor)
 
 	const int indices_d[] =
 	{
-		TRX_JAGUAR,
 		//TRX_GRASS_LONG_D,
 		TRX_GRASS_SHORT_D,
 
 		//TRX_MARBLE_BLACK_D,
-		TRX_MARBLE_BASE_D,
+		//TRX_MARBLE_BASE_D,
 
-		TRX_MOSSGROUND_D,
 		//TRX_MOSSGROUND_02A_D,
-		TRX_NATURE_PEBBLES_D
+		TRX_NATURE_PEBBLES_D,
+		TRX_MOSSGROUND_D,
+		TRX_JAGUAR
 	};
 
 	const int indices_n[] =

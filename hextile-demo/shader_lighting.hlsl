@@ -316,13 +316,18 @@ float4 GroundExamplePS( VS_OUTPUT In ) : SV_TARGET0
 		{
 			hex2colTex_histo(color, weights, 
 					  g_trx_transfer_d, g_trx_invtransfer_d, g_trx_basis_d, g_samWrap, 
-					  st0, 0.0);
+					  st0, g_rotStrength);
 		}
 		else
 		{
-			hex2colTex(color, weights, g_trx_d, g_samWrap, st0, 0.0);
+			hex2colTex(color, weights, g_trx_d, g_samWrap, st0, g_rotStrength, g_FakeContrastColor);
 		}
 		albedo = color.xyz;
+
+		if(g_showWeightsMode==1)
+			albedo *= (0.75*weights + 0.25);
+		else if(g_showWeightsMode==2)
+			albedo = weights;
 	}
 
 	if(g_bHexNormalEnabled)
@@ -338,12 +343,12 @@ float4 GroundExamplePS( VS_OUTPUT In ) : SV_TARGET0
 		{
 			hex2colTex_histo(color, weights, 
 					  g_trx_transfer_n, g_trx_invtransfer_n, g_trx_basis_n, g_samWrap, 
-					  st0, 0.0);
+					  st0, g_rotStrength);
 		}
 		else
 		{
 			float2 dHduv;
-			bumphex2derivNMap(dHduv, weights, g_trx_n, g_samWrap, st0, 0.0);
+			bumphex2derivNMap(dHduv, weights, g_trx_n, g_samWrap, st0, g_rotStrength, g_FakeContrastNormal);
 			color = float4(0.5*float3(-dHduv.xy,1.0)+0.5, 1.0);
 			if(g_bFlipVertDeriv) { color.y = 1.0-color.y; }
 
@@ -356,6 +361,14 @@ float4 GroundExamplePS( VS_OUTPUT In ) : SV_TARGET0
 	
 		// resolve
 		vN = ResolveNormalFromSurfaceGradient(surfGrad);
+
+		if(!g_bHexColorEnabled)
+		{
+			if(g_showWeightsMode==1)
+				albedo *= (0.75*weights + 0.25);
+			else if(g_showWeightsMode==2)
+				albedo = weights;
+		}
 	}
 
 	return float4(Epilogue(In, vN, albedo),1);

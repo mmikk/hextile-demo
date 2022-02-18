@@ -13,7 +13,7 @@ unistruct cbMeshInstance
 unistruct cbGlobals
 {
 	Vec3	g_vCamPos;
-	int		g_iPadQ;
+	int		g_showWeightsMode;
 
 	Mat44	g_mProj;
 	Mat44	g_mViewProjection;
@@ -35,7 +35,9 @@ unistruct cbGlobals
 	int		g_useRegularTiling;
 
 	float	g_DetailTileRate;
-	float	g_FakeContrast;
+	float	g_FakeContrastColor;
+	float	g_FakeContrastNormal;
+	float	g_rotStrength;
 
 };
 

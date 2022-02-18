@@ -81,7 +81,25 @@ static bool g_bHexColEnabled = true;
 static bool g_bHexNormalEnabled = false;
 static bool g_bHistoPreservEnabled = false;
 static bool g_bRegularTilingEnabled = false;
+static int g_showWeightsMode = 0;
 
+const float initialTileRate = 10.0f;
+
+enum PARAM_MODE
+{
+	ADJUST_TILING_RATE=0,
+	ADJUST_ROT_STRENGTH,
+	ADJUST_COL_CONTRAST,
+	ADJUST_NORMAL_CONTRAST,
+
+	NUM_PARAMS_TO_TWEAK
+};
+
+static int g_iToggleParamWeAdjust = ADJUST_TILING_RATE;
+static float g_DetailTileRate = initialTileRate;
+static float g_RotStrength = 0.0f;
+static float g_ColorFakeContrast = 0.5f;
+static float g_NormalFakeContrast = 0.5f;
 
 //static float frnd() { return (float) (((double) (rand() % (RAND_MAX+1))) / RAND_MAX); }
 
@@ -141,16 +159,27 @@ void RenderText()
 		if(g_bShowNormalsWS)
 			g_pTxtHelper->DrawTextLine(L"Show Normals in world space enabled (toggle using n)\n");
 		else g_pTxtHelper->DrawTextLine(L"Show Normals in world space disabled (toggle using n)\n");
-
+		/*
 		// R
 		if(g_bIndirectSpecular)
 			g_pTxtHelper->DrawTextLine(L"Indirect Specular Reflection enabled (toggle using r)\n");
 		else g_pTxtHelper->DrawTextLine(L"Indirect Specular Reflection disabled (toggle using r)\n");	
-
+		*/
 		// I
 		if(g_bEnableShadows)
 			g_pTxtHelper->DrawTextLine(L"Shadows enabled (toggle using i)\n");
 		else g_pTxtHelper->DrawTextLine(L"Shadows disabled (toggle using i)\n");
+
+		// V
+		if(g_showWeightsMode==0)
+			g_pTxtHelper->DrawTextLine(L"Hex Weights OFF (toggle using v)\n");
+		else if(g_showWeightsMode==1)
+			g_pTxtHelper->DrawTextLine(L"Hex Weights ON with overlay (toggle using v)\n");
+		else
+		{
+			assert(g_showWeightsMode==2);
+			g_pTxtHelper->DrawTextLine(L"Hex Weights ON (toggle using v)\n");
+		}
 
 		// C
 		if(g_bHexColEnabled)
@@ -173,6 +202,31 @@ void RenderText()
 			g_pTxtHelper->DrawTextLine(L"Regular tiling enabled (toggle using t)\n");
 		else g_pTxtHelper->DrawTextLine(L"Regular tiling disabled (toggle using t)\n");
 
+		// M
+		WCHAR dest_str[256];
+		WCHAR tmp_str[256];
+		swprintf(dest_str, L"Parameter ");
+	
+		if(g_iToggleParamWeAdjust == ADJUST_TILING_RATE)
+			swprintf(tmp_str, L"tiling rate %2.3f", g_DetailTileRate);
+		else if(g_iToggleParamWeAdjust == ADJUST_ROT_STRENGTH)
+			swprintf(tmp_str, L"rotation strength %2.3f", g_RotStrength);
+		else if(g_iToggleParamWeAdjust == ADJUST_COL_CONTRAST)
+			swprintf(tmp_str, L"color contrast %1.3f", g_ColorFakeContrast);
+		else
+		{
+			assert(g_iToggleParamWeAdjust==ADJUST_NORMAL_CONTRAST);
+			swprintf(tmp_str, L"normal contrast %1.3f ", g_NormalFakeContrast);
+		}
+
+		wcscat(dest_str, tmp_str);
+		swprintf(tmp_str, L"(toggle which parameter to adjust using m)");
+		wcscat(dest_str, tmp_str);
+
+		g_pTxtHelper->DrawTextLine(dest_str);
+
+		g_pTxtHelper->SetForegroundColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
+		g_pTxtHelper->DrawTextLine(L"\t\tAdjust active parameter by using the mouse while pressing and holding the middle mouse button.\n");
 	}
 
 	g_pTxtHelper->End();
@@ -269,8 +323,12 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 	((cbGlobals *)MappedSubResource.pData)->g_bHexNormalEnabled = g_bHexNormalEnabled;
 	((cbGlobals *)MappedSubResource.pData)->g_bUseHistoPreserv = g_bHistoPreservEnabled;
 	((cbGlobals *)MappedSubResource.pData)->g_useRegularTiling = g_bRegularTilingEnabled;
-	((cbGlobals *)MappedSubResource.pData)->g_DetailTileRate = 10.0f;
-	((cbGlobals *)MappedSubResource.pData)->g_FakeContrast = 0.5f;
+	((cbGlobals *)MappedSubResource.pData)->g_DetailTileRate = g_DetailTileRate;
+	((cbGlobals *)MappedSubResource.pData)->g_FakeContrastColor = g_ColorFakeContrast;
+	((cbGlobals *)MappedSubResource.pData)->g_FakeContrastNormal = g_NormalFakeContrast;
+	((cbGlobals *)MappedSubResource.pData)->g_rotStrength = g_RotStrength;
+	((cbGlobals *)MappedSubResource.pData)->g_showWeightsMode = g_showWeightsMode;
+	
 
     pd3dImmediateContext->Unmap( g_pGlobalsCB, 0 );
 
@@ -453,60 +511,175 @@ void CALLBACK OnD3D11ReleasingSwapChain( void* pUserContext )
 //--------------------------------------------------------------------------------------
 // Handle key presses
 //--------------------------------------------------------------------------------------
+
+static float g_fMouseTilingValue = -1.0f+2*(1.0f-expf(log(0.5f)*(log(2*initialTileRate)/log(2.0f))));
+static float g_fMouseRotStrengthValue = 0.0f;
+static float g_fMouseColorContrastValue = 0.5f;
+static float g_fMouseNormalContrastValue = 0.5f;
+
+
+static float CheckTilingMouseValue(const float fParamMouseValueDelta)
+{
+	float tempTilingValue = g_fMouseTilingValue + 0.68f*fParamMouseValueDelta;
+	if(tempTilingValue>0.97f) { tempTilingValue = 0.97f; }
+	else if(tempTilingValue<(-1+0.00001f)) { tempTilingValue = -1+0.00001f; }
+	return tempTilingValue;
+}
+static void UpdateTilingRate(const float mouseTilingValue)
+{
+	const float K = log(1-(0.5f*mouseTilingValue+0.5f)) / log(0.5f);
+	g_DetailTileRate = 0.5f * powf(2.0f, K);
+}
+
+static float CheckRotStrengthMouseValue(const float fParamMouseValueDelta)
+{
+	float tempRotValue = g_fMouseRotStrengthValue + 0.8f*fParamMouseValueDelta;
+	if(tempRotValue>0.999f) { tempRotValue = 0.999f; }
+	else if(tempRotValue<0.0f) { tempRotValue = 0.0f; }
+	return tempRotValue;
+}
+
+static float CheckColorContrastMouseValue(const float fParamMouseValueDelta)
+{
+	float tempContrastValue = g_fMouseColorContrastValue + 0.8f*fParamMouseValueDelta;
+	if(tempContrastValue>0.999f) { tempContrastValue = 0.999f; }
+	else if(tempContrastValue<0.0f) { tempContrastValue = 0.0f; }
+	return tempContrastValue;
+}
+
+static float CheckNormalContrastMouseValue(const float fParamMouseValueDelta)
+{
+	float tempContrastValue = g_fMouseNormalContrastValue + 0.8f*fParamMouseValueDelta;
+	if(tempContrastValue>0.999f) { tempContrastValue = 0.999f; }
+	else if(tempContrastValue<0.0f) { tempContrastValue = 0.0f; }
+	return tempContrastValue;
+}
+
+
 LRESULT CALLBACK MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing,
                           void* pUserContext )
 {
-#if 0
+	const int Width = DXUTGetDXGIBackBufferSurfaceDesc()->Width;
+	const int Height = DXUTGetDXGIBackBufferSurfaceDesc()->Height;
+
+	static bool g_bDrag = false;
+	static int Xbeg, Ybeg;
     switch( uMsg )
     {
-        case WM_KEYDOWN:    // Prevent the camera class to use some prefefined keys that we're already using    
-		{
-            switch( (UINT)wParam )
+        case WM_MBUTTONDOWN:
+        {
+            if(uMsg == WM_MBUTTONDOWN )
             {
-                case VK_CONTROL:    
-                case VK_LEFT:
-				{
-					g_fL0ay -= 0.05f;
-					return 0;
-				}
-				break;
-                case VK_RIGHT:         
-				{
-					g_fL0ay += 0.05f;
-					return 0;
-				}
-                case VK_UP:
-				{
-					g_fL0ax += 0.05f;
-					if(g_fL0ax>(M_PI/2.5)) g_fL0ax=(M_PI/2.5);
-					return 0;
-				}
-				break;
-                case VK_DOWN:
-				{
-					g_fL0ax -= 0.05f;
-					if(g_fL0ax<-(M_PI/2.5)) g_fL0ax=-(M_PI/2.5);
-					return 0;
-				}
-				break;
-				case 'F':
-				{
-					int iTing;
-					iTing = 0;
-				}
-				default:
-					;
+                Xbeg = ( int )( short )LOWORD( lParam );
+                Ybeg = ( int )( short )HIWORD( lParam );
+				
+				g_bDrag = true;
+                //m_ArcBall.OnBegin( iMouseX, iMouseY );
+                //SetCapture( hWnd );
             }
+            return TRUE;
+        }
+
+        case WM_MOUSEMOVE:
+        {
+            if( g_bDrag )
+            {
+                int iMouseX = ( int )( short )LOWORD( lParam );
+                int iMouseY = ( int )( short )HIWORD( lParam );
+                
+				const float paramMouseValueDelta = ((float) (iMouseX-Xbeg))/Width;
+
+				if(g_iToggleParamWeAdjust==ADJUST_TILING_RATE)
+				{
+					float tempTilingValue = CheckTilingMouseValue(paramMouseValueDelta);
+					UpdateTilingRate(tempTilingValue);
+				}
+				else if(g_iToggleParamWeAdjust==ADJUST_ROT_STRENGTH)
+				{
+					float tempRotStrengthValue = CheckRotStrengthMouseValue(paramMouseValueDelta);
+					g_RotStrength = 25*tempRotStrengthValue;
+				}
+				else if(g_iToggleParamWeAdjust==ADJUST_COL_CONTRAST)
+				{
+					float tempColorContrastValue = CheckColorContrastMouseValue(paramMouseValueDelta);
+					g_ColorFakeContrast = tempColorContrastValue;
+				}
+				else if(g_iToggleParamWeAdjust==ADJUST_NORMAL_CONTRAST)
+				{
+					float tempNormalContrastValue = CheckNormalContrastMouseValue(paramMouseValueDelta);
+					g_NormalFakeContrast = tempNormalContrastValue;
+				}
+				
+
+				int iTing;
+				iTing = 0;
+            }
+            return TRUE;
+        }
+
+        case WM_MBUTTONUP:
+        {
+            if(uMsg == WM_MBUTTONUP )
+            {
+				int iMouseX = ( int )( short )LOWORD( lParam );
+                int iMouseY = ( int )( short )HIWORD( lParam );
+                
+				const float paramMouseValueDelta = ((float) (iMouseX-Xbeg))/Width;
+
+				if(g_iToggleParamWeAdjust==ADJUST_TILING_RATE)
+				{
+					g_fMouseTilingValue = CheckTilingMouseValue(paramMouseValueDelta);
+					UpdateTilingRate(g_fMouseTilingValue);
+				}
+				else if(g_iToggleParamWeAdjust==ADJUST_ROT_STRENGTH)
+				{
+					g_fMouseRotStrengthValue = CheckRotStrengthMouseValue(paramMouseValueDelta);
+					g_RotStrength = 25*g_fMouseRotStrengthValue;
+				}
+				else if(g_iToggleParamWeAdjust==ADJUST_COL_CONTRAST)
+				{
+					g_fMouseColorContrastValue = CheckColorContrastMouseValue(paramMouseValueDelta);
+					g_ColorFakeContrast = g_fMouseColorContrastValue;
+				}
+				else if(g_iToggleParamWeAdjust==ADJUST_NORMAL_CONTRAST)
+				{
+					g_fMouseNormalContrastValue = CheckNormalContrastMouseValue(paramMouseValueDelta);
+					g_NormalFakeContrast = g_fMouseNormalContrastValue;
+				}
+
+                g_bDrag = false;
+            }
+        }
+		
+		case WM_CAPTURECHANGED:
+        {
+			g_bDrag = false;
 		}
-		break;
+
+			/*
+        case WM_CAPTURECHANGED:
+        {
+            if( ( HWND )lParam != hWnd )
+            {
+                if( ( m_nRotateMask & MOUSE_LEFT_BUTTON ) ||
+                    ( m_nRotateMask & MOUSE_MIDDLE_BUTTON ) ||
+                    ( m_nRotateMask & MOUSE_RIGHT_BUTTON ) )
+                {
+                    m_ArcBall.OnEnd();
+                    ReleaseCapture();
+                }
+            }
+            return TRUE;
+        }*/
     }
-#endif
+
     // Pass all remaining windows messages to camera so it can respond to user input
     g_Camera.HandleMessages( hWnd, uMsg, wParam, lParam );
 
 
     return 0;
 }
+
 
 void CALLBACK OnKeyboard( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserContext )
 {
@@ -563,6 +736,15 @@ void CALLBACK OnKeyboard( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserC
 			g_bRegularTilingEnabled = !g_bRegularTilingEnabled;
 		}
 
+		if (nChar == 'M')
+		{
+			g_iToggleParamWeAdjust = (g_iToggleParamWeAdjust+1) % NUM_PARAMS_TO_TWEAK;
+		}
+
+		if (nChar == 'V')
+		{
+			g_showWeightsMode = (g_showWeightsMode+1) % 3;
+		}
 	}
 }
 

@@ -1,5 +1,5 @@
-#ifndef __HEXTILINGRSW_H__
-#define __HEXTILINGRSW_H__
+#ifndef __HEXTILINGRWS_H__
+#define __HEXTILINGRWS_H__
 
 // this variant is designed for large open worlds to preserve
 // fractional precision with planar and triplanar projection.

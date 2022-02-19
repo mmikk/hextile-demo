@@ -94,6 +94,11 @@ bool IsFlipNormal()
 	return false;
 }
 
+float GetTileRate()
+{
+	return 0.05*g_DetailTileRate;
+}
+
 static bool g_bFlipVertDeriv = true;
 static float3 surfPosInWorld;
 static float3 surfPosInView;
@@ -287,6 +292,47 @@ void hex2colTex_histo(out float4 color, out float3 weights,
 	weights = ProduceHexWeights(W, vertex1, vertex2, vertex3);
 }
 
+void FetchColorAndWeight(out float3 color, out float3 weights, float2 st)
+{
+	float4 col4;
+	if(g_useRegularTiling)
+	{
+		col4 = g_trx_d.Sample(g_samWrap, st);
+		weights = 1.0;
+	}
+	else if(g_bUseHistoPreserv)
+	{
+		hex2colTex_histo(col4, weights, 
+					g_trx_transfer_d, g_trx_invtransfer_d, g_trx_basis_d, g_samWrap, 
+					st, g_rotStrength);
+	}
+	else
+	{
+		hex2colTex(col4, weights, g_trx_d, g_samWrap, st, g_rotStrength, g_FakeContrastColor);
+	}
+	color = col4.xyz;
+}
+
+void FetchDerivAndWeight(out float2 dHduv, out float3 weights, float2 st)
+{
+	if(g_useRegularTiling)
+	{
+		float4 color = g_trx_n.Sample(g_samWrap, st);
+		dHduv = TspaceNormalToDerivative(2*color.xyz-1.0);
+	}
+	else if(g_bUseHistoPreserv)
+	{
+		float4 color;
+		hex2colTex_histo(color, weights, 
+					g_trx_transfer_n, g_trx_invtransfer_n, g_trx_basis_n, g_samWrap, 
+					st, g_rotStrength);
+		dHduv = TspaceNormalToDerivative(2*color.xyz-1.0);
+	}
+	else
+	{
+		bumphex2derivNMap(dHduv, weights, g_trx_n, g_samWrap, st, g_rotStrength, g_FakeContrastNormal);
+	}
+}
 
 
 #if defined(GROUND_EXAMPLE)
@@ -298,31 +344,22 @@ float4 GroundExamplePS( VS_OUTPUT In ) : SV_TARGET0
 
 	float3 albedo = pow(float3(70.0,101.0,125.0)/255.0, 2.2);
 
+	float3 sp = GetTileRate() * surfPosInWorld;
+
+	float2 st0 = float2(sp.x, -sp.z);	// since looking at -Z in a right hand coordinate frame.
+
+	// need to negate .y of derivative due to upper-left corner being the texture origin
+	st0 = float2(st0.x, 1.0-st0.y);
+
 
 	float3 vN = nrmBaseNormal;
 
-	float2 st0 = 20*g_DetailTileRate*In.TextureUV.xy;
-
 	if(g_bHexColorEnabled)
 	{
-		float4 color=0.0;
-		float3 weights=0.0;
-		
-		if(g_useRegularTiling)
-		{
-			color = g_trx_d.Sample(g_samWrap, st0);
-		}
-		else if(g_bUseHistoPreserv)
-		{
-			hex2colTex_histo(color, weights, 
-					  g_trx_transfer_d, g_trx_invtransfer_d, g_trx_basis_d, g_samWrap, 
-					  st0, g_rotStrength);
-		}
-		else
-		{
-			hex2colTex(color, weights, g_trx_d, g_samWrap, st0, g_rotStrength, g_FakeContrastColor);
-		}
-		albedo = color.xyz;
+		float3 color, weights;
+		FetchColorAndWeight(color, weights, st0);
+
+		albedo = color;
 
 		if(g_showWeightsMode==1)
 			albedo *= (0.75*weights + 0.25);
@@ -332,35 +369,126 @@ float4 GroundExamplePS( VS_OUTPUT In ) : SV_TARGET0
 
 	if(g_bHexNormalEnabled)
 	{
-		float4 color=0.0;
+		float2 dHduv=0.0;
 		float3 weights=0.0;
-		
-		if(g_useRegularTiling)
-		{
-			color = g_trx_n.Sample(g_samWrap, st0);
-		}
-		else if(g_bUseHistoPreserv)
-		{
-			hex2colTex_histo(color, weights, 
-					  g_trx_transfer_n, g_trx_invtransfer_n, g_trx_basis_n, g_samWrap, 
-					  st0, g_rotStrength);
-		}
-		else
-		{
-			float2 dHduv;
-			bumphex2derivNMap(dHduv, weights, g_trx_n, g_samWrap, st0, g_rotStrength, g_FakeContrastNormal);
-			color = float4(0.5*float3(-dHduv.xy,1.0)+0.5, 1.0);
-			if(g_bFlipVertDeriv) { color.y = 1.0-color.y; }
+		FetchDerivAndWeight(dHduv, weights, st0);
 
+		if(!g_bHexColorEnabled)
+		{
+			if(g_showWeightsMode==1)
+				albedo *= (0.75*weights + 0.25);
+			else if(g_showWeightsMode==2)
+				albedo = weights;
 		}
 
-		//float3 vNt = normalize(2*color.xyz-1.0);
-		float2 dHduv = TspaceNormalToDerivative(2*color.xyz-1.0);
-		
-		float3 surfGrad = SurfgradFromTBN(dHduv, mikktsTangent, mikktsBitangent);
+		// switch to lower-left origin
+		dHduv.y *= -1.0;
+
+		// negate back since we sampled using (x,-z)
+		dHduv.y *= -1.0;
+
+		float3 volGrad = float3(dHduv.x, 0.0, dHduv.y);
+		float3 surfGrad = SurfgradFromVolumeGradient(volGrad);
+		float weightY = DetermineTriplanarWeights(1.0).y;
+
+		surfGrad *= (weightY * g_fBumpIntensity);
 	
 		// resolve
 		vN = ResolveNormalFromSurfaceGradient(surfGrad);
+	}
+
+	return float4(Epilogue(In, vN, albedo),1);
+}
+#endif
+
+void CommonTriplanarNormal(out float3 normO, out float3 weightsO, float3 position, float3 Nbase, float bumpScale)
+{
+	// backup base normal and patch it
+	const float3 recordBaseNorm = nrmBaseNormal;
+	nrmBaseNormal = Nbase;
+
+
+	float3 pos = GetTileRate() * position;
+
+	float2 sp_x = float2(-pos.z, pos.y);
+	float2 sp_y = float2(pos.x, -pos.z);
+	float2 sp_z = float2(pos.x, pos.y);
+
+	// need to negate .y of derivative due to upper-left corner being the texture origin
+	float2 dHduv_x=0.0, dHduv_y=0.0, dHduv_z=0.0;
+	float3 weights_x=0.0, weights_y=0.0, weights_z=0.0;
+
+	FetchDerivAndWeight(dHduv_x, weights_x, float2(sp_x.x, 1.0-sp_x.y));
+	FetchDerivAndWeight(dHduv_y, weights_y, float2(sp_y.x, 1.0-sp_y.y));
+	FetchDerivAndWeight(dHduv_z, weights_z, float2(sp_z.x, 1.0-sp_z.y));
+
+	// switch to lower-left origin
+	dHduv_x.y *= -1.0; dHduv_y.y *= -1.0; dHduv_z.y *= -1.0;
+
+	// need to negate these back since we used (-z,y) and (x,-z) for sampling
+	dHduv_x.x *= -1.0; dHduv_y.y *= -1.0;
+
+
+	float3 weights = DetermineTriplanarWeights(3.0);
+	float3 surfGrad = bumpScale * SurfgradFromTriplanarProjection(weights, dHduv_x, dHduv_y, dHduv_z);
+
+
+	normO = ResolveNormalFromSurfaceGradient(surfGrad);
+	weightsO = weights.x*weights_x + weights.y*weights_y + weights.z*weights_z;
+
+	// restore base normal 
+	nrmBaseNormal = recordBaseNorm;
+}
+
+void CommonTriplanarColor(out float3 colorO, out float3 weightsO, float3 position, float3 Nbase)
+{
+	// backup base normal and patch it
+	const float3 recordBaseNorm = nrmBaseNormal;
+	nrmBaseNormal = Nbase;
+
+
+	float3 pos = GetTileRate() * position;
+
+	float2 sp_x = float2(-pos.z, pos.y);
+	float2 sp_y = float2(pos.x, -pos.z);
+	float2 sp_z = float2(pos.x, pos.y);
+
+	// need to negate .y of derivative due to upper-left corner being the texture origin
+	float3 col_x=0.0, col_y=0.0, col_z=0.0;
+	float3 weights_x=0.0, weights_y=0.0, weights_z=0.0;
+
+	FetchColorAndWeight(col_x, weights_x, float2(sp_x.x, 1.0-sp_x.y));
+	FetchColorAndWeight(col_y, weights_y, float2(sp_y.x, 1.0-sp_y.y));
+	FetchColorAndWeight(col_z, weights_z, float2(sp_z.x, 1.0-sp_z.y));
+	
+	float3 weights = DetermineTriplanarWeights(3.0);
+
+	colorO = weights.x*col_x + weights.y*col_y + weights.z*col_z;
+	weightsO = weights.x*weights_x + weights.y*weights_y + weights.z*weights_z;
+
+	// restore base normal 
+	nrmBaseNormal = recordBaseNorm;
+}
+
+void FetchColorNormalTriPlanar(inout float3 albedo, inout float3 vN, float3 position, float3 Nbase, float bumpScale=1.0)
+{
+	if(g_bHexColorEnabled)
+	{
+		float3 color, weights;
+		CommonTriplanarColor(color, weights, position, Nbase);
+
+		albedo = color;
+
+		if(g_showWeightsMode==1)
+			albedo *= (0.75*weights + 0.25);
+		else if(g_showWeightsMode==2)
+			albedo = weights;
+	}
+
+	if(g_bHexNormalEnabled)
+	{
+		float3 weights=0.0;
+		CommonTriplanarNormal(vN, weights, position, Nbase, bumpScale);
 
 		if(!g_bHexColorEnabled)
 		{
@@ -370,10 +498,7 @@ float4 GroundExamplePS( VS_OUTPUT In ) : SV_TARGET0
 				albedo = weights;
 		}
 	}
-
-	return float4(Epilogue(In, vN, albedo),1);
 }
-#endif
 
 #if defined(SPHERE_EXAMPLE)
 float4 SphereExamplePS( VS_OUTPUT In ) : SV_TARGET0
@@ -381,8 +506,13 @@ float4 SphereExamplePS( VS_OUTPUT In ) : SV_TARGET0
 	Prologue(In);
 
 	float3 albedo=pow(float3(106, 106, 106)/255.0,2.2);
-		
-	return float4(Epilogue(In, nrmBaseNormal, albedo),1);
+	float3 vN = nrmBaseNormal;
+
+	//float3 albedo = pow(float3(70.0,101.0,125.0)/255.0, 2.2);
+	FetchColorNormalTriPlanar(albedo, vN, surfPosInWorld, nrmBaseNormal);
+	
+
+	return float4(Epilogue(In, vN, albedo),1);
 }
 #endif
 
@@ -400,6 +530,12 @@ float4 PirateExamplePS( VS_OUTPUT In ) : SV_TARGET0
 	float3 vN = ResolveNormalFromSurfaceGradient(surfGrad);
 
 	float3 albedo = g_albedo_tex.Sample(g_samClamp, In.TextureUV.xy);
+
+	float mask_r = g_mask_tex.Sample(g_samClamp, In.TextureUV.xy).x;
+	float3 albedo2 = albedo;
+	FetchColorNormalTriPlanar(albedo2, vN, surfPosInWorld, vN, mask_r);
+	albedo = lerp(albedo, albedo2, mask_r);
+
 	float smoothness = g_smoothness_tex.Sample(g_samClamp, In.TextureUV.xy).x;
 	float ao = g_ao_tex.Sample(g_samClamp, In.TextureUV.xy).x;
 
@@ -419,8 +555,11 @@ float4 RockExamplePS( VS_OUTPUT In ) : SV_TARGET0
 	
 	// resolve
 	float3 vN = ResolveNormalFromSurfaceGradient(surfGrad);
+	float3 albedo=pow(float3(72, 72, 72)/255.0,2.2);
 
-	return float4(Epilogue(In, vN),1);
+	FetchColorNormalTriPlanar(albedo, vN, surfPosInWorld, vN);
+
+	return float4(Epilogue(In, vN, albedo),1);
 }
 #endif
 

@@ -181,7 +181,7 @@ static void SetupGroundPlanePipeline(ID3D11Device* pd3dDevice, ID3D11DeviceConte
 
 static void SetupSpherePrimPipeline(ID3D11Device* pd3dDevice, ID3D11DeviceContext *pContext, ID3D11Buffer * pGlobalsCB)
 {
-	Mat44 mat; SetScaleAndPos(&mat, 1.5f, Vec3(g_S*3.39f+g_O - 3.5, 1.28f+1.5, -0.003f + 4.5) );
+	Mat44 mat; SetScaleAndPos(&mat, 8.0f, Vec3(g_S*3.39f+g_O - 3.5 + 6.0f, 1.28f+8.0f, -0.003f + 4.5) );
 	GenericPipelineSetup(pd3dDevice, pContext, pGlobalsCB, mat, MAKE_STR_PAIR(SPHERE_EXAMPLE), "SphereExamplePS", MAKE_STR_SIZE_PAIR(cbMatSphereShader));
 
 	HRESULT hr;

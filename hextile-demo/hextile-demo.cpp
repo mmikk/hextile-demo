@@ -83,7 +83,7 @@ static bool g_bHistoPreservEnabled = false;
 static bool g_bRegularTilingEnabled = false;
 static int g_showWeightsMode = 0;
 
-const float initialTileRate = 10.0f;
+const float initialTileRate = 5.0f;
 
 enum PARAM_MODE
 {
@@ -98,7 +98,7 @@ enum PARAM_MODE
 static int g_iToggleParamWeAdjust = ADJUST_TILING_RATE;
 static float g_DetailTileRate = initialTileRate;
 static float g_RotStrength = 0.0f;
-static float g_ColorFakeContrast = 0.5f;
+static float g_ColorFakeContrast = 0.7f;
 static float g_NormalFakeContrast = 0.5f;
 
 //static float frnd() { return (float) (((double) (rand() % (RAND_MAX+1))) / RAND_MAX); }

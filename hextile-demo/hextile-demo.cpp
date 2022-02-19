@@ -227,6 +227,7 @@ void RenderText()
 
 		g_pTxtHelper->SetForegroundColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
 		g_pTxtHelper->DrawTextLine(L"\t\tAdjust active parameter by using the mouse while pressing and holding the middle mouse button.\n");
+		g_pTxtHelper->DrawTextLine(L"\t\tShuffle textures for color and normal on keys o and p.\n");
 	}
 
 	g_pTxtHelper->End();

@@ -183,6 +183,9 @@
     <ClInclude Include="hextiling.h">
       <Filter>Shaders</Filter>
     </ClInclude>
+    <ClInclude Include="hextiling_rsw.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="hextile-demo.cpp">

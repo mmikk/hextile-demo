@@ -172,6 +172,7 @@
     <ClInclude Include="geommath\vec4.h" />
     <ClInclude Include="hextile-demo.h" />
     <ClInclude Include="hextiling.h" />
+    <ClInclude Include="hextiling_rsw.h" />
     <ClInclude Include="illum.h" />
     <ClInclude Include="meshimport\meshdraw.h" />
     <ClInclude Include="meshimport\mikktspace.h" />

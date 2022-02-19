@@ -33,34 +33,16 @@ enum TEX_ID
 	ROCK_BASE_TS,
 
 	TRX_JAGUAR,
-	TRX_GRASS_LONG_D=TRX_JAGUAR+4,
-	TRX_GRASS_LONG_N=TRX_GRASS_LONG_D+4,
-	TRX_GRASS_SHORT_D=TRX_GRASS_LONG_N+4,
-	TRX_GRASS_SHORT_N=TRX_GRASS_SHORT_D+4,
-	TRX_LEATHER_N=TRX_GRASS_SHORT_N+4,
-	TRX_MARBLE_BLACK_D=TRX_LEATHER_N+4,
-	TRX_MARBLE_BASE_D=TRX_MARBLE_BLACK_D+4,
-
-	TRX_MOSSGROUND_D=TRX_MARBLE_BASE_D+4,
-	TRX_MOSSGROUND_02A_D=TRX_MOSSGROUND_D+4,
-	TRX_NATURE_PEBBLES_D=TRX_MOSSGROUND_02A_D+4,
-
-	TRX_NORMAL_SAMPLE_01A_N=TRX_NATURE_PEBBLES_D+4,
-	TRX_NORMAL_SAMPLE_02A_N=TRX_NORMAL_SAMPLE_01A_N+4,
-	TRX_NORMAL_SAMPLE_03A_N=TRX_NORMAL_SAMPLE_02A_N+4,
-	TRX_NORMAL_SAMPLE_04A_N=TRX_NORMAL_SAMPLE_03A_N+4,
-	TRX_NORMAL_SAMPLE_05A_N=TRX_NORMAL_SAMPLE_04A_N+4,
-	TRX_NORMAL_SAMPLE_06A_N=TRX_NORMAL_SAMPLE_05A_N+4,
-
-	TRX_PEBBLES_BEACH_N=TRX_NORMAL_SAMPLE_06A_N+4,
-	TRX_PEBBLES_BEACH_CROP_N=TRX_PEBBLES_BEACH_N+4,
+	TRX_GRASS_SHORT_D=TRX_JAGUAR+4,
+	TRX_MOSSGROUND_D=TRX_GRASS_SHORT_D+4,
+	TRX_NATURE_PEBBLES_D=TRX_MOSSGROUND_D+4,
+		
+	TRX_PEBBLES_BEACH_CROP_N=TRX_NATURE_PEBBLES_D+4,
 	TRX_SEAN_MICRO_N=TRX_PEBBLES_BEACH_CROP_N+4,
-
 	TRX_SNOW_MELT_02A_N=TRX_SEAN_MICRO_N+4,
 	TRX_SNOW_MELT_04A_N=TRX_SNOW_MELT_02A_N+4,
-	TRX_SNOW_MELT_N=TRX_SNOW_MELT_04A_N+4,
 	
-	TABLE_FG = TRX_SNOW_MELT_N+4,
+	TABLE_FG = TRX_SNOW_MELT_04A_N+4,
 
 	NUM_TEXTURES
 };
@@ -337,37 +319,15 @@ bool InitResources(ID3D11Device* pd3dDevice, ID3D11DeviceContext *pContext, ID3D
 
 	// import tileables with histogram-preserving attachments
 	ImportTextureTRX(pd3dDevice, pContext, TRX_JAGUAR, L"textures/details/", L"JaguarTile.jpg", true);
-	ImportTextureTRX(pd3dDevice, pContext, TRX_GRASS_LONG_D, L"textures/details/", L"grass_green_long_d.png", true);
-	ImportTextureTRX(pd3dDevice, pContext, TRX_GRASS_LONG_N, L"textures/details/", L"grass_green_long_n.png", false);
 	ImportTextureTRX(pd3dDevice, pContext, TRX_GRASS_SHORT_D, L"textures/details/", L"grass_short_01a_d.png", true);
-	ImportTextureTRX(pd3dDevice, pContext, TRX_GRASS_SHORT_N, L"textures/details/", L"grass_short_01a_n.png", false);
-
-	ImportTextureTRX(pd3dDevice, pContext, TRX_LEATHER_N, L"textures/details/", L"leather_tile_Normal.png", false);
-
-	ImportTextureTRX(pd3dDevice, pContext, TRX_MARBLE_BLACK_D, L"textures/details/", L"Marble_SlabBlack_1K_d.png", true);
-	ImportTextureTRX(pd3dDevice, pContext, TRX_MARBLE_BASE_D, L"textures/details/", L"MarbleBase0051_2k.png", true);
-
 	ImportTextureTRX(pd3dDevice, pContext, TRX_MOSSGROUND_D, L"textures/details/", L"moss_ground_1k_tile.png", true);
-	ImportTextureTRX(pd3dDevice, pContext, TRX_MOSSGROUND_02A_D, L"textures/details/", L"moss_ground_02a_d.png", true);
 	ImportTextureTRX(pd3dDevice, pContext, TRX_NATURE_PEBBLES_D, L"textures/details/", L"Nature_Pebbles_4K_d.png", true);
 
-	ImportTextureTRX(pd3dDevice, pContext, TRX_NORMAL_SAMPLE_01A_N, L"textures/details/", L"normal_sample_n_01a.png", false);
-	ImportTextureTRX(pd3dDevice, pContext, TRX_NORMAL_SAMPLE_02A_N, L"textures/details/", L"normal_sample_n_02a.png", false);
-	ImportTextureTRX(pd3dDevice, pContext, TRX_NORMAL_SAMPLE_03A_N, L"textures/details/", L"normal_sample_n_03a.png", false);
-	ImportTextureTRX(pd3dDevice, pContext, TRX_NORMAL_SAMPLE_04A_N, L"textures/details/", L"normal_sample_n_04a.png", false);
-	ImportTextureTRX(pd3dDevice, pContext, TRX_NORMAL_SAMPLE_05A_N, L"textures/details/", L"normal_sample_n_05a.png", false);
-	ImportTextureTRX(pd3dDevice, pContext, TRX_NORMAL_SAMPLE_06A_N, L"textures/details/", L"normal_sample_n_06a.png", false);
-
-
-	ImportTextureTRX(pd3dDevice, pContext, TRX_PEBBLES_BEACH_N, L"textures/details/", L"pebbles_beach_01a_n.png", false);
 	ImportTextureTRX(pd3dDevice, pContext, TRX_PEBBLES_BEACH_CROP_N, L"textures/details/", L"pebbles_beach_crop_01a_n.png", false);
-
 	ImportTextureTRX(pd3dDevice, pContext, TRX_SEAN_MICRO_N, L"textures/details/", L"Sean_Micro_Normal.png", false);
-
 	ImportTextureTRX(pd3dDevice, pContext, TRX_SNOW_MELT_02A_N, L"textures/details/", L"snow_melt_02a_n.png", false);
 	ImportTextureTRX(pd3dDevice, pContext, TRX_SNOW_MELT_04A_N, L"textures/details/", L"snow_melt_04a_n.png", false);
-	ImportTextureTRX(pd3dDevice, pContext, TRX_SNOW_MELT_N, L"textures/details/", L"snow_melt_Normal.png", false);
-
+	
 
 
 	// import raw mesh data
@@ -490,13 +450,7 @@ void ToggleDetailTex(bool toggleIsForColor)
 
 	const int indices_d[] =
 	{
-		//TRX_GRASS_LONG_D,
 		TRX_GRASS_SHORT_D,
-
-		//TRX_MARBLE_BLACK_D,
-		//TRX_MARBLE_BASE_D,
-
-		//TRX_MOSSGROUND_02A_D,
 		TRX_NATURE_PEBBLES_D,
 		TRX_MOSSGROUND_D,
 		TRX_JAGUAR
@@ -504,24 +458,10 @@ void ToggleDetailTex(bool toggleIsForColor)
 
 	const int indices_n[] =
 	{
-		/*TRX_GRASS_LONG_N,
-		TRX_GRASS_SHORT_N,
-		TRX_LEATHER_N,
-
-		TRX_NORMAL_SAMPLE_01A_N,
-		TRX_NORMAL_SAMPLE_02A_N,
-		TRX_NORMAL_SAMPLE_03A_N,
-		TRX_NORMAL_SAMPLE_04A_N,
-		TRX_NORMAL_SAMPLE_05A_N,
-		TRX_NORMAL_SAMPLE_06A_N,
-
-		TRX_PEBBLES_BEACH_N,*/
 		TRX_PEBBLES_BEACH_CROP_N,
 		TRX_SEAN_MICRO_N,
-
 		TRX_SNOW_MELT_02A_N,
-		TRX_SNOW_MELT_04A_N//,
-		//TRX_SNOW_MELT_N
+		TRX_SNOW_MELT_04A_N
 	};
 
 	const int nrColorTex = sizeof(indices_d) / sizeof(int);
@@ -585,6 +525,7 @@ static bool GenericPipelineSetup(ID3D11Device* pd3dDevice, ID3D11DeviceContext *
 		RegisterGenericNoiseBuffers(pipe);
 	
 		// register samplers
+		pipe.RegisterSampler("g_samWrapAniso", GetDefaultSamplerWrapAniso() );
 		pipe.RegisterSampler("g_samWrap", GetDefaultSamplerWrap() );
 		pipe.RegisterSampler("g_samClamp", GetDefaultSamplerClamp() );
 		pipe.RegisterSampler("g_samShadow", GetDefaultShadowSampler() );

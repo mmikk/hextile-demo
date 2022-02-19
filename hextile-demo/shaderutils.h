@@ -10,6 +10,7 @@ ID3D11RasterizerState * GetDefaultRasterSolidCullFront();
 ID3D11RasterizerState * GetDefaultRasterSolidCullBack();
 ID3D11SamplerState * GetDefaultShadowSampler();
 ID3D11SamplerState * GetDefaultSamplerWrap();
+ID3D11SamplerState * GetDefaultSamplerWrapAniso();
 ID3D11SamplerState * GetDefaultSamplerClamp();
 ID3D11DepthStencilState * GetDefaultDepthStencilState();
 ID3D11DepthStencilState * GetDefaultDepthStencilState_NoDepthWrite();

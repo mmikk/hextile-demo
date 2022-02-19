@@ -32,6 +32,7 @@ Texture2D g_shadowResolve;
 Texture2D g_table_FG;
 
 SamplerState g_samWrap;
+SamplerState g_samWrapAniso;
 SamplerState g_samClamp;
 SamplerComparisonState g_samShadow;
 

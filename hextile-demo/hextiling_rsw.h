@@ -68,9 +68,9 @@ void bumphex2derivNMapRWS(out float2 deriv, out float3 weights,
 	float2 cen2 = MakeCenST(vertex2);
 	float2 cen3 = MakeCenST(vertex3);
 
-	float2 st1 = mul(st - cen1, rot1) + frac(mul(st_offs, rot1)) + cen1 + hash(vertex1);
-	float2 st2 = mul(st - cen2, rot2) + frac(mul(st_offs, rot2)) + cen2 + hash(vertex2);
-	float2 st3 = mul(st - cen3, rot3) + frac(mul(st_offs, rot3)) + cen3 + hash(vertex3);
+	float2 st1 = mul(st, rot1) + frac(mul(st_offs - cen1, rot1) + cen1) + hash(vertex1);
+	float2 st2 = mul(st, rot2) + frac(mul(st_offs - cen2, rot2) + cen2) + hash(vertex2);
+	float2 st3 = mul(st, rot3) + frac(mul(st_offs - cen3, rot3) + cen3) + hash(vertex3);
 
 	// Fetch input
 	float2 d1 = sampleDeriv(nmap, samp, st1, 
@@ -120,9 +120,9 @@ void hex2colTexRWS(out float4 color, out float3 weights,
 	float2 cen2 = MakeCenST(vertex2);
 	float2 cen3 = MakeCenST(vertex3);
 
-	float2 st1 = mul(st - cen1, rot1) + frac(mul(st_offs, rot1)) + cen1 + hash(vertex1);
-	float2 st2 = mul(st - cen2, rot2) + frac(mul(st_offs, rot2)) + cen2 + hash(vertex2);
-	float2 st3 = mul(st - cen3, rot3) + frac(mul(st_offs, rot3)) + cen3 + hash(vertex3);
+	float2 st1 = mul(st, rot1) + frac(mul(st_offs - cen1, rot1) + cen1) + hash(vertex1);
+	float2 st2 = mul(st, rot2) + frac(mul(st_offs - cen2, rot2) + cen2) + hash(vertex2);
+	float2 st3 = mul(st, rot3) + frac(mul(st_offs - cen3, rot3) + cen3) + hash(vertex3);
 
 	// Fetch input
 	float4 c1 = tex.SampleGrad(samp, st1, 

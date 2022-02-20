@@ -52,7 +52,7 @@ float3 ProduceHexWeights(float3 W, int2 vertex1, int2 vertex2, int2 vertex3);
 
 
 // Input:\ nmap is a normal map
-// Input:\ g increase contrast when g>0.5
+// Input:\ r increase contrast when r>0.5
 // Output:\ deriv is a derivative dHduv wrt units in pixels
 // Output:\ weights shows the weight of each hex tile
 void bumphex2derivNMap(out float2 deriv, out float3 weights,
@@ -104,7 +104,7 @@ void bumphex2derivNMap(out float2 deriv, out float3 weights,
 
 
 // Input:\ tex is a texture with color
-// Input:\ g increase contrast when g>0.5
+// Input:\ r increase contrast when r>0.5
 // Output:\ color is the blended result
 // Output:\ weights shows the weight of each hex tile
 void hex2colTex(out float4 color, out float3 weights,

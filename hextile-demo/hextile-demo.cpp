@@ -402,7 +402,7 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
     InitApp();
     DXUTInit( true, true );
     DXUTSetCursorSettings( true, true ); // Show the cursor and clip it when in full screen
-    DXUTCreateWindow( L"Surface Gradient Based Bump Mapping Demo." );
+    DXUTCreateWindow( L"Hex-Tiling Demo." );
 	int dimX = 1280, dimY = 960;
 	DXUTCreateDevice( D3D_FEATURE_LEVEL_11_0, true, dimX, dimY);
     //DXUTCreateDevice( D3D_FEATURE_LEVEL_11_0, true, 1024, 768);

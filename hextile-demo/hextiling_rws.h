@@ -3,7 +3,7 @@
 
 // this variant is designed for large open worlds to preserve
 // fractional precision with planar and triplanar projection.
-// this is done by assuming relative world space (RSW) is used to
+// this is done by assuming relative world space (RWS) is used to
 // produce the sampling coordinate st but the offset to absolute world
 // space is used to produce the (per frame) constant st_offs (scale by tile rate is applied to both)
 

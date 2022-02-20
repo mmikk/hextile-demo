@@ -226,7 +226,7 @@ void RenderText()
 		g_pTxtHelper->DrawTextLine(dest_str);
 
 		g_pTxtHelper->SetForegroundColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
-		g_pTxtHelper->DrawTextLine(L"\t\tAdjust active parameter by using the mouse while pressing and holding the middle mouse button.\n");
+		g_pTxtHelper->DrawTextLine(L"\t\tAdjust active parameter by using the mouse while pressing and holding the middle mouse button. Reset all four using the r key.\n");
 		g_pTxtHelper->DrawTextLine(L"\t\tShuffle textures for color and normal on keys o and p.\n");
 	}
 
@@ -515,7 +515,7 @@ void CALLBACK OnD3D11ReleasingSwapChain( void* pUserContext )
 
 static float g_fMouseTilingValue = -1.0f+2*(1.0f-expf(log(0.5f)*(log(2*initialTileRate)/log(2.0f))));
 static float g_fMouseRotStrengthValue = 0.0f;
-static float g_fMouseColorContrastValue = 0.5f;
+static float g_fMouseColorContrastValue = 0.7f;
 static float g_fMouseNormalContrastValue = 0.5f;
 
 
@@ -709,7 +709,17 @@ void CALLBACK OnKeyboard( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserC
 
 		if (nChar == 'R')
 		{
-			g_bIndirectSpecular = !g_bIndirectSpecular;
+			g_fMouseTilingValue = -1.0f+2*(1.0f-expf(log(0.5f)*(log(2*initialTileRate)/log(2.0f))));
+			g_fMouseRotStrengthValue = 0.0f;
+			g_fMouseColorContrastValue = 0.7f;
+			g_fMouseNormalContrastValue = 0.5f;
+
+			g_DetailTileRate = initialTileRate;
+			g_RotStrength = g_fMouseRotStrengthValue;
+			g_ColorFakeContrast = g_fMouseColorContrastValue;
+			g_NormalFakeContrast = g_fMouseNormalContrastValue;
+
+			//g_bIndirectSpecular = !g_bIndirectSpecular;
 		}
 
 		if (nChar == 'I')

@@ -140,7 +140,7 @@ void hex2colTex(out float4 color, out float3 weights,
 
 	// use luminance as weight
 	float3 Lw = float3(0.299, 0.587, 0.114);
-	float3 Dw = float3( dot(c1,Lw), dot(c2,Lw), dot(c3,Lw));
+	float3 Dw = float3(dot(c1.xyz,Lw),dot(c2.xyz,Lw),dot(c3.xyz,Lw));
 	
 	Dw = lerp(1.0, Dw, g_fallOffContrast);	// 0.6
 	float3 W = Dw*pow(float3(w1, w2, w3), g_exp);	// 7

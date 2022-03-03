@@ -1,0 +1,2 @@
+D:\GitHub\hextile-demo\hextile-demo\x64\Debug\hextile-demo.exe
+D:\GitHub\hextile-demo\hextile-demo\x64\Debug\hextile-demo.pdb

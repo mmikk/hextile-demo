@@ -395,7 +395,7 @@ float4 GroundExamplePS( VS_OUTPUT In ) : SV_TARGET0
 		surfGrad *= (weightY * g_fBumpIntensity);
 	
 		// resolve
-		vN = ResolveNormalFromSurfaceGradient(surfGrad);
+		if(g_showWeightsMode!=2 || g_bHexColorEnabled) vN = ResolveNormalFromSurfaceGradient(surfGrad);
 	}
 
 	return float4(Epilogue(In, vN, albedo),1);
@@ -488,8 +488,9 @@ void FetchColorNormalTriPlanar(inout float3 albedo, inout float3 vN, float3 posi
 
 	if(g_bHexNormalEnabled)
 	{
+		float bs = (g_showWeightsMode!=2 || g_bHexColorEnabled) ? bumpScale : 0.0;
 		float3 weights=0.0;
-		CommonTriplanarNormal(vN, weights, position, Nbase, bumpScale);
+		CommonTriplanarNormal(vN, weights, position, Nbase, bs);
 
 		if(!g_bHexColorEnabled)
 		{

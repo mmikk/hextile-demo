@@ -368,6 +368,7 @@ float4 GroundExamplePS( VS_OUTPUT In ) : SV_TARGET0
 			albedo = weights;
 	}
 
+	float bs = g_fBumpIntensity;
 	if(g_bHexNormalEnabled)
 	{
 		float2 dHduv=0.0;
@@ -377,9 +378,12 @@ float4 GroundExamplePS( VS_OUTPUT In ) : SV_TARGET0
 		if(!g_bHexColorEnabled)
 		{
 			if(g_showWeightsMode==1)
-				albedo *= (0.75*weights + 0.25);
-			else if(g_showWeightsMode==2)
+				albedo = (0.9*weights + 0.1);
+			else if (g_showWeightsMode == 2)
+			{
+				bs = 0.0;
 				albedo = weights;
+			}
 		}
 
 		// switch to lower-left origin
@@ -392,10 +396,10 @@ float4 GroundExamplePS( VS_OUTPUT In ) : SV_TARGET0
 		float3 surfGrad = SurfgradFromVolumeGradient(volGrad);
 		float weightY = DetermineTriplanarWeights(1.0).y;
 
-		surfGrad *= (weightY * g_fBumpIntensity);
+		surfGrad *= (weightY * bs);
 	
 		// resolve
-		if(g_showWeightsMode!=2 || g_bHexColorEnabled) vN = ResolveNormalFromSurfaceGradient(surfGrad);
+		vN = ResolveNormalFromSurfaceGradient(surfGrad);
 	}
 
 	return float4(Epilogue(In, vN, albedo),1);
@@ -495,7 +499,7 @@ void FetchColorNormalTriPlanar(inout float3 albedo, inout float3 vN, float3 posi
 		if(!g_bHexColorEnabled)
 		{
 			if(g_showWeightsMode==1)
-				albedo *= (0.75*weights + 0.25);
+				albedo = (0.9*weights + 0.1);
 			else if(g_showWeightsMode==2)
 				albedo = weights;
 		}

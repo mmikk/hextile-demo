@@ -491,7 +491,8 @@ void FetchColorNormalTriPlanar(inout float3 albedo, inout float3 vN, float3 posi
 
 	if(g_bHexNormalEnabled)
 	{
-		float bs = (g_showWeightsMode!=2 /*|| g_bHexColorEnabled*/) ? bumpScale : 0.0;
+		//float bs = (g_showWeightsMode!=2 || g_bHexColorEnabled) ? bumpScale : 0.0;
+		float bs = g_showWeightsMode==2 ? 0.0 : bumpScale;
 		float3 weights=0.0;
 		CommonTriplanarNormal(vN, weights, position, Nbase, bs);
 

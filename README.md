@@ -11,3 +11,5 @@ In our adaptation we omit histogram–preservation and replace it with a novel b
 
 <img src="https://github.com/mmikk/mmikk.github.io/blob/master/pictures/hex_demo/showhextiling.png" alt="Hex-Tiling Example" />
  
+It is common in real-time graphics to use tiling textures to represent large surface area however repetition is noticeable as can be seen
+here on the left. Using hex-tiling allows us to hide the repetition but requires a solution to hide the seams between adjacent hex tiles.

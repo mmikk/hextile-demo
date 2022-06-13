@@ -9,7 +9,7 @@ a transform– and inverse transform texture which must both be sampled in the s
 Thus deep integration into the application is required for this to appear opaque to the author of the shader and material.
 In our adaptation we omit histogram–preservation and replace it with a novel blending method which allows us to sample the original source texture.
 
-<img src="https://github.com/mmikk/mmikk.github.io/blob/master/pictures/hex_demo/showhextiling.png" alt="Hex-Tiling Example" />
+<img src="https://github.com/mmikk/mmikk.github.io/blob/master/pictures/hex_demo/colorhextiling.png" alt="Hex-Tiling Example" />
  
 It is common in real-time graphics to use tiling textures to represent large surface area however repetition is noticeable as can be seen
 here on the left. Using hex-tiling allows us to hide the repetition but requires a solution to hide the seams between adjacent hex tiles.

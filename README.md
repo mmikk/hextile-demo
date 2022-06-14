@@ -21,3 +21,13 @@ to adjust the active parameter. Press the r key to reset all 4 parameters.
 Most of the hex-tiling specific utility functions are in the file hextiling.h however for those of you looking to use
 hex-tiling as planar/triplanar projection on large levels you should look at hextiling_rws.h which
 provides a special variant to maintain fractional precision as we move far away from the center of absolute world space.
+
+An important observation when rotating hex tiles for normal maps is the average normal of the normal map
+must align "well" with the Z axis (0,0,1) or the tilt will appear very clearly in the lit result.
+Good alignment is achieved (roughly) if the normal map corresponds to a tiling height map. Note that a 
+tiling normal map does not necessarily correspond to a tiling height map. A basic example is a normal map
+where every pixel is the same normal. This represents a tiling normal map but not a tiling height map.
+
+In practice it is easy to end up with a normal map which does not represent a tiling height map since artists may use
+a combination of different art tools which offer no such guarantee. It is possible to fix a misaligned normal map
+by importing it into [Knald](https://www.knaldtech.com/) at which point the integrator finds a best fit tiling height map. However, be sure to set the Slope Range in the integrator group to 80% or higher to ensure the tool allows slopes steeper than 45 degrees.

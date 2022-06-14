@@ -26,7 +26,7 @@ An important observation when rotating hex tiles for normal maps is the average 
 must align "well" with the Z axis (0,0,1) or the tilt will appear very clearly in the lit result.
 Good alignment is achieved when the normal map corresponds to a tiling height map. Note that a 
 tiling normal map does not necessarily correspond to a tiling height map. A basic example is a normal map
-where every pixel is the same tilted normal. This represents a tiling normal map but not a tiling height map.
+of a tilted plane (ie. a flat color). This represents a tiling normal map but not a tiling height map.
 
 In practice it is easy to end up with a normal map which does not represent a tiling height map since artists may use
 a combination of different art tools which offer no such guarantee. It is possible to fix a misaligned normal map

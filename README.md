@@ -24,7 +24,7 @@ provides a special variant to maintain fractional precision as we move far away 
 
 An important observation when rotating hex tiles for normal maps is the average normal of the normal map
 must align "well" with the Z axis (0,0,1) or the tilt will appear very clearly in the lit result.
-Good alignment is achieved (roughly) if the normal map corresponds to a tiling height map. Note that a 
+Good alignment is achieved when the normal map corresponds to a tiling height map. Note that a 
 tiling normal map does not necessarily correspond to a tiling height map. A basic example is a normal map
 where every pixel is the same tilted normal. This represents a tiling normal map but not a tiling height map.
 

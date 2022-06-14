@@ -14,7 +14,7 @@ a transform– and inverse transform texture which must both be sampled in the s
 Thus deep integration into the application is required for this to appear opaque to the author of the shader and material.
 In our adaptation we omit histogram–preservation and replace it with a novel blending method which allows us to sample the original source texture.
 
-When running this demo be sure to try to rotate the hex tiles. You can toggle between 4 different parametters to tweak on the m key:
+When running this demo be sure to try to rotate the hex tiles. You can toggle between 4 different parameters to tweak on the m key:
 tile rate, rotation, hex tile contrast for color and hex tile contrast for normal mapping. Press and hold the scroll wheel while moving the mouse
 to adjust the active parameter. Press the r key to reset all 4 parameters. 
 

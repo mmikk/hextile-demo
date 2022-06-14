@@ -31,3 +31,4 @@ of a tilted plane (ie. a flat color). This represents a tiling normal map but no
 In practice it is easy to end up with a normal map which does not represent a tiling height map since artists may use
 a combination of different art tools which offer no such guarantee. It is possible to fix a misaligned normal map
 by importing it into [Knald](https://www.knaldtech.com/) at which point the integrator finds a best fit tiling height map. However, be sure to set the Slope Range in the integrator group to 80% or higher to ensure the tool allows slopes steeper than 45 degrees.
+The result can be exported as a "fixed" normal map.

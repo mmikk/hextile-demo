@@ -17,3 +17,7 @@ In our adaptation we omit histogram–preservation and replace it with a novel b
 When running this demo be sure to try to rotate the hex tiles. You can toggle between 4 different parametters to tweak on the m key:
 tile rate, rotation, hex tile contrast for color and hex tile contrast for normal mapping. Press and hold the scroll wheel while moving the mouse
 to adjust the active parameter. Press the r key to reset all 4 parameters. 
+
+Most of the hex-tiling specific utility functions are in the file hextiling.h however for those of you looking to use
+hex-tiling as planar/triplanar projection on large levels you should look at hextiling_rws.h which
+provides a special variant to maintain fractional precision as we move far away from the center of absolute world space.

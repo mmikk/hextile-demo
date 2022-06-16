@@ -22,7 +22,7 @@ to adjust the active parameter. Press the r key to reset all 4 parameters.
 https://user-images.githubusercontent.com/20206840/174144304-15ebfb50-e5e7-4e66-ba3f-dfcc2d284627.mp4
 
 
-https://github.com/mmikk/mmikk.github.io/raw/master/pictures/hex_demo/Hex-Tiling-Vid_compressed.mp4
+# https://github.com/mmikk/mmikk.github.io/raw/master/pictures/hex_demo/Hex-Tiling-Vid_compressed.mp4
 
 Most of the hex-tiling specific utility functions are in the file hextiling.h however for those of you looking to use
 hex-tiling as planar/triplanar projection on large levels you should look at hextiling_rws.h which

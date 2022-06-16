@@ -18,7 +18,7 @@ When running this demo be sure to try to rotate the hex tiles. You can toggle be
 tile rate, rotation, hex tile border contrast for color and hex tile border contrast for normal mapping. Press and hold the scroll wheel while moving the mouse
 to adjust the active parameter. Press the r key to reset all 4 parameters. 
 
-https://user-images.githubusercontent.com/58986949/115314310-805b2780-a1a7-11eb-8558-648a367ea231.mp4
+https://github.com/mmikk/mmikk.github.io/blob/master/pictures/hex_demo/Hex-Tiling-Vid.mp4
 
 Most of the hex-tiling specific utility functions are in the file hextiling.h however for those of you looking to use
 hex-tiling as planar/triplanar projection on large levels you should look at hextiling_rws.h which

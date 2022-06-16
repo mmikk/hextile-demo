@@ -19,7 +19,8 @@ tile rate, rotation, hex tile border contrast for color and hex tile border cont
 to adjust the active parameter. Press the r key to reset all 4 parameters. 
 
 
-https://user-images.githubusercontent.com/20206840/174144304-15ebfb50-e5e7-4e66-ba3f-dfcc2d284627.mp4
+https://user-images.githubusercontent.com/20206840/174149327-fd6bbf22-9299-49f9-8f96-c043d90fdde4.mp4
+
 
 
 Most of the hex-tiling specific utility functions are in the file hextiling.h however for those of you looking to use
